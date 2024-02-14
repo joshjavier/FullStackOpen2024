@@ -2,11 +2,15 @@ const Header = ({ course }) => {
   return <h1>{course}</h1>
 }
 
+const Part = ({ part, exercises }) => {
+  return <p>{part} {exercises}</p>
+}
+
 const Content = ({ parts, exercises }) => {
   return (
     <>
       {Array(parts.length).fill(0).map((_, i) => (
-        <p key={i}>{parts[i]} {exercises[i]}</p>
+        <Part key={i} part={parts[i]} exercises={exercises[i]} />
       ))}
     </>
   )
