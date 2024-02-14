@@ -5,7 +5,7 @@ const Statistics = ({ good, neutral, bad }) => {
   const average = (all / 3).toFixed(2)
   const positive = (good / all * 100).toFixed(2)
 
-  return (
+  return all === 0 ? <p>No feedback given</p> : (
     <div>
       <h2>statistics</h2>
       <ul>
