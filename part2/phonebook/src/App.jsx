@@ -1,8 +1,9 @@
 import { useState } from "react"
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: 'Arto Hellas' }])
+  const [persons, setPersons] = useState([{ name: 'Arto Hellas', number: '040-123456' }])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -13,7 +14,7 @@ const App = () => {
       return
     }
 
-    const newPerson = { name: newName }
+    const newPerson = { name: newName, number: newNumber }
     setPersons(persons => [...persons, newPerson])
     setNewName('')
   }
@@ -22,14 +23,24 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
       <form onSubmit={onSubmit}>
-        <label>
-          name:
+        <div>
+          <label htmlFor="name-input">name: </label>
           <input
+            id="name-input"
             type="text"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
           />
-        </label>
+        </div>
+        <div>
+          <label htmlFor="number-input">number: </label>
+          <input
+            id="number-input"
+            type="text"
+            value={newNumber}
+            onChange={(e) => setNewNumber(e.target.value)}
+          />
+        </div>
         <div>
           <button>add</button>
         </div>
@@ -37,7 +48,7 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {persons.map(person =>
-          <li key={person.name}>{person.name}</li>
+          <li key={person.name}>{person.name} {person.number}</li>
         )}
       </ul>
     </div>
