@@ -14,7 +14,7 @@ const App = () => {
 
   const [selected, setSelected] = useState(0)
 
-  const onClick = () => {
+  const onNext = () => {
     let randomIndex = selected
     while (randomIndex === selected) {
       randomIndex = Math.floor(Math.random() * anecdotes.length)
@@ -23,9 +23,21 @@ const App = () => {
     setSelected(randomIndex)
   }
 
+  // votes feature
+  const [points, setPoints] = useState(Array(anecdotes.length).fill(0))
+
+  const onVote = () => {
+    setPoints(points => {
+      const updatedPoints = [...points]
+      updatedPoints[selected] += 1
+      return updatedPoints
+    })
+  }
+
   return (
     <div>
-      <button onClick={onClick}>next anecdote</button>
+      <p><button onClick={onNext}>next anecdote</button></p>
+      <p><button onClick={onVote}>vote</button> <span>{points[selected]} votes</span></p>
       <p>{anecdotes[selected]}</p>
     </div>
   )
