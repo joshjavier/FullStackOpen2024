@@ -34,11 +34,18 @@ const App = () => {
     })
   }
 
+  const highestVoteCount = points.toSorted((a, b) => b - a)[0]
+
   return (
     <div>
-      <p><button onClick={onNext}>next anecdote</button></p>
-      <p><button onClick={onVote}>vote</button> <span>{points[selected]} votes</span></p>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
+      <p><button onClick={onVote}>vote</button> <span>{points[selected]} votes</span></p>
+      <p><button onClick={onNext}>next anecdote</button></p>
+
+      <h2>Anecdote with most votes</h2>
+      <p>{anecdotes[points.findIndex(votes => votes === highestVoteCount)]}</p>
+      <p>{points[points.findIndex(votes => votes === highestVoteCount)]} votes</p>
     </div>
   )
 }
