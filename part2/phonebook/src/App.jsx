@@ -1,4 +1,7 @@
 import { useState } from "react"
+import Filter from "./components/Filter"
+import PersonForm from './components/PersonForm'
+import Persons from "./components/Persons"
 
 const App = (props) => {
   const [persons, setPersons] = useState(props.persons)
@@ -27,45 +30,17 @@ const App = (props) => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <div>
-        <label htmlFor="filter-input">filter shown with </label>
-        <input
-          type="text"
-          id="filter-input"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-      </div>
+      <Filter filter={filter} handleChange={(e) => setFilter(e.target.value)} />
       <h2>Add a new</h2>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="name-input">name: </label>
-          <input
-            id="name-input"
-            type="text"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="number-input">number: </label>
-          <input
-            id="number-input"
-            type="text"
-            value={newNumber}
-            onChange={(e) => setNewNumber(e.target.value)}
-          />
-        </div>
-        <div>
-          <button>add</button>
-        </div>
-      </form>
+      <PersonForm
+        newName={newName}
+        newNumber={newNumber}
+        handleChangeName={(e) => setNewName(e.target.value)}
+        handleChangeNumber={(e) => setNewNumber(e.target.value)}
+        handleSubmit={onSubmit}
+      />
       <h2>Numbers</h2>
-      <ul>
-        {personsToShow.map(person =>
-          <li key={person.name}>{person.name} {person.number}</li>
-        )}
-      </ul>
+      <Persons persons={personsToShow} />
     </div>
   )
 }
