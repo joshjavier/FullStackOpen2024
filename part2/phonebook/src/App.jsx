@@ -6,6 +6,13 @@ const App = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
+
+    // only add new names if they're not in the phonebook
+    if (persons.map(p => p.name).includes(newName)) {
+      alert(`${newName} is already added to the phonebook`)
+      return
+    }
+
     const newPerson = { name: newName }
     setPersons(persons => [...persons, newPerson])
     setNewName('')
