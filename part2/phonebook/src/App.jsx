@@ -38,6 +38,18 @@ const App = () => {
       })
   }
 
+  const handleDelete = (id) => {
+    phonebookService
+      .delete(id)
+      .then(response => {
+        if (response.status === 200) {
+          setPersons(persons => persons.filter(p => p.id != response.data.id))
+        } else {
+          alert('Something went wrong.')
+        }
+      })
+  }
+
   const personsToShow = filter.trim() === ''
     ? persons
     : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
@@ -55,7 +67,7 @@ const App = () => {
         handleSubmit={onSubmit}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} handleDelete={handleDelete} />
     </div>
   )
 }
