@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import noteService from './services/notes'
 import Note from './components/Note'
 
 const App = () => {
@@ -9,23 +9,23 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3000/notes')
+    noteService
+      .getAll()
       .then(response => {
-        console.log('promise fulfilled')
         setNotes(response.data)
       })
   }, [])
   console.log('render', notes.length, 'notes')
 
   const toggleImportanceOf = (id) => {
-    const url = `http://localhost:3000/notes/${id}`
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
 
-    axios.put(url, changedNote).then(response => {
-      setNotes(notes => notes.map(n => n.id !== id ? n : response.data))
-    })
+    noteService
+      .update(id, changedNote)
+      .then(response => {
+        setNotes(notes => notes.map(n => n.id !== id ? n : response.data))
+      })
   }
 
   const addNote = (event) => {
@@ -36,8 +36,8 @@ const App = () => {
       id: notes.length + 1,
     }
 
-    axios
-      .post('http://localhost:3000/notes', noteObject)
+    noteService
+      .create(noteObject)
       .then(response => {
         setNotes(notes => [...notes, response.data])
         setNewNote('')
