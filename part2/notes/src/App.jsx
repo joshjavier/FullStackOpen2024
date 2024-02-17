@@ -26,8 +26,12 @@ const App = () => {
       id: notes.length + 1,
     }
 
-    setNotes(notes => [...notes, noteObject])
-    setNewNote('')
+    axios
+      .post('http://localhost:3000/notes', noteObject)
+      .then(response => {
+        setNotes(notes => [...notes, response.data])
+        setNewNote('')
+      })
   }
 
   const notesToShow = showAll
