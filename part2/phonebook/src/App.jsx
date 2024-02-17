@@ -22,20 +22,38 @@ const App = () => {
     e.preventDefault()
 
     // only add new names if they're not in the phonebook
-    if (persons.map(p => p.name).includes(newName)) {
-      alert(`${newName} is already added to the phonebook`)
-      return
+    const existingPerson = persons.find(p => p.name === newName)
+    if (existingPerson) {
+      if (existingPerson.number === newNumber) {
+        alert(`${newName} is already added to the phonebook`)
+        return
+      }
+
+      // offer to change the number of an existing person
+      if (confirm(`${existingPerson.name} is already added to phonebook, replace the old number with a new one?`)) {
+        const updatedPerson = { ...existingPerson, number: newNumber }
+
+        phonebookService
+          .update(existingPerson.id, updatedPerson)
+          .then(updatedPerson => {
+            setPersons(persons => persons.map(person => (
+              person.id !== updatedPerson.id ? person : updatedPerson
+            )))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
+    } else {
+      const newPerson = { name: newName, number: newNumber }
+
+      phonebookService
+        .create(newPerson)
+        .then(newPerson => {
+          setPersons(persons => [...persons, newPerson])
+          setNewName('')
+          setNewNumber('')
+        })
     }
-
-    const newPerson = { name: newName, number: newNumber }
-
-    phonebookService
-      .create(newPerson)
-      .then(newPerson => {
-        setPersons(persons => [...persons, newPerson])
-        setNewName('')
-        setNewNumber('')
-      })
   }
 
   const handleDelete = (id) => {
