@@ -1,7 +1,7 @@
 const PersonForm = ({
   newName,
   newNumber,
-  handlChangeName,
+  handleChangeName,
   handleChangeNumber,
   handleSubmit,
 }) => {
@@ -13,7 +13,7 @@ const PersonForm = ({
           id="name-input"
           type="text"
           value={newName}
-          onChange={handlChangeName}
+          onChange={handleChangeName}
         />
       </div>
       <div>
