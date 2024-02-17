@@ -18,6 +18,16 @@ const App = () => {
   }, [])
   console.log('render', notes.length, 'notes')
 
+  const toggleImportanceOf = (id) => {
+    const url = `http://localhost:3000/notes/${id}`
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+
+    axios.put(url, changedNote).then(response => {
+      setNotes(notes => notes.map(n => n.id !== id ? n : response.data))
+    })
+  }
+
   const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
@@ -48,7 +58,11 @@ const App = () => {
       </div>
       <ul>
         {notesToShow.map(note =>
-          <Note key={note.id} note={note} />
+          <Note
+            key={note.id}
+            note={note}
+            toggleImportance={() => toggleImportanceOf(note.id)}
+          />
         )}
       </ul>
       <form onSubmit={addNote}>
