@@ -28,8 +28,14 @@ const App = () => {
     }
 
     const newPerson = { name: newName, number: newNumber }
-    setPersons(persons => [...persons, newPerson])
-    setNewName('')
+
+    axios
+      .post('http://localhost:3000/persons', newPerson)
+      .then(response => {
+        setPersons(persons => [...persons, response.data])
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const personsToShow = filter.trim() === ''
