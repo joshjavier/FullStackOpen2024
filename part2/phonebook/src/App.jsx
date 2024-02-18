@@ -57,6 +57,10 @@ const App = () => {
             setNewNumber('')
             setSuccessMsg(`Updated number for ${updatedPerson.name}`)
           })
+          .catch(error => {
+            setErrorMsg(`Information of ${existingPerson.name} has already been removed from the server`)
+            setPersons(persons => persons.filter(p => p.id !== existingPerson.id))
+          })
       }
     } else {
       const newPerson = { name: newName, number: newNumber }
