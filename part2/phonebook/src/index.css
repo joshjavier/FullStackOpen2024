@@ -1,3 +1,21 @@
 *, *::before, *::after {
   box-sizing: border-box;
 }
+
+[role="alert"]:empty {
+  display: none;
+}
+
+[role="alert"] {
+  color: var(--color, red);
+  background-color: var(--bg-color, gainsboro);
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+[role="alert"].success {
+  --color: green;
+}

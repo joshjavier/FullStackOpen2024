@@ -3,12 +3,15 @@ import phonebookService from './services/phonebook'
 import Filter from "./components/Filter"
 import PersonForm from './components/PersonForm'
 import Persons from "./components/Persons"
+import Notification from "./components/Notification"
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [successMsg, setSuccessMsg] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
 
   useEffect(() => {
     phonebookService
@@ -17,6 +20,17 @@ const App = () => {
         setPersons(persons)
       })
   }, [])
+
+  useEffect(() => {
+    if (errorMsg === '' && successMsg === '') return
+
+    const timeoutID = setTimeout(() => {
+      if (errorMsg !== '') setErrorMsg('')
+      if (successMsg !== '') setSuccessMsg('')
+    }, 5000);
+
+    return () => clearTimeout(timeoutID)
+  }, [successMsg, errorMsg])
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -41,6 +55,7 @@ const App = () => {
             )))
             setNewName('')
             setNewNumber('')
+            setSuccessMsg(`Updated number for ${updatedPerson.name}`)
           })
       }
     } else {
@@ -52,6 +67,7 @@ const App = () => {
           setPersons(persons => [...persons, newPerson])
           setNewName('')
           setNewNumber('')
+          setSuccessMsg(`Added ${newPerson.name}`)
         })
     }
   }
@@ -62,8 +78,9 @@ const App = () => {
       .then(response => {
         if (response.status === 200) {
           setPersons(persons => persons.filter(p => p.id != response.data.id))
+          setSuccessMsg(`${response.data.name} has been removed from the phonebook`)
         } else {
-          alert('Something went wrong.')
+          setErrorMsg('Something went wrong.')
         }
       })
   }
@@ -75,6 +92,8 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={successMsg} type="success" />
+      <Notification message={errorMsg} type="error" />
       <Filter filter={filter} handleChange={(e) => setFilter(e.target.value)} />
       <h2>Add a new</h2>
       <PersonForm
