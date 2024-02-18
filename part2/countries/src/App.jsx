@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import countriesService from './services/countries'
+import weatherService from './services/weather'
 import Country from "./components/Country"
 import CountryList from "./components/CountryList"
 
@@ -8,6 +9,7 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [matches, setMatches] = useState([])
   const [country, setCountry] = useState(null)
+  const [weather, setWeather] = useState(null)
 
   useEffect(() => {
     countriesService
@@ -16,6 +18,17 @@ const App = () => {
         setCountries(countries)
       })
   }, [])
+
+  useEffect(() => {
+    if (!country) return
+
+    const [lat, lon] = country.capitalInfo.latlng
+    weatherService
+      .get({ lat, lon })
+      .then(response => {
+        setWeather(response.data)
+      })
+  }, [country])
 
   const onSearch = (e) => {
     e.preventDefault()
@@ -32,6 +45,7 @@ const App = () => {
       }
       return matches
     })
+    setWeather(null)
   }
 
   const handleShow = (country) => {
@@ -52,7 +66,7 @@ const App = () => {
         />
       </form>
       {country ? (
-        <Country country={country} />
+        <Country country={country} weather={weather} />
       ) : (matches.length > 1 && matches.length <= 10) ? (
         <CountryList matches={matches} handleShow={handleShow} />
       ) : matches.length > 10 ? (
