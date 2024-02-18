@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import axios from 'axios'
+import countriesService from './services/countries'
 
 const Country = ({ country }) => {
   return (
@@ -24,10 +24,10 @@ const App = () => {
   const [matches, setMatches] = useState([])
 
   useEffect(() => {
-    axios
-      .get('https://studies.cs.helsinki.fi/restcountries/api/all')
-      .then(response => {
-        setCountries(response.data)
+    countriesService
+      .getAll()
+      .then(countries => {
+        setCountries(countries)
       })
   }, [])
 
