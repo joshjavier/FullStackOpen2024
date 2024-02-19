@@ -29,6 +29,14 @@ app.get('/api/persons', (req, res) => {
   res.json(persons)
 })
 
+app.get('/info', (req, res) => {
+  const html = `
+    <p>Phonebook has info for ${persons.length} people</p>
+    <p>${Date()}</p>
+  `
+  res.send(html)
+})
+
 app.listen(port, () => {
   console.log(`Phonebook backend listening on port ${port}`)
 })
