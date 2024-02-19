@@ -80,9 +80,10 @@ const App = () => {
     phonebookService
       .delete(id)
       .then(response => {
-        if (response.status === 200) {
-          setPersons(persons => persons.filter(p => p.id != response.data.id))
-          setSuccessMsg(`${response.data.name} has been removed from the phonebook`)
+        if (response.status === 200 || response.status === 204) {
+          const deletedPerson = persons.find(p => p.id === id)
+          setPersons(persons => persons.filter(p => p.id != id))
+          setSuccessMsg(`${deletedPerson.name} has been removed from the phonebook`)
         } else {
           setErrorMsg('Something went wrong.')
         }
