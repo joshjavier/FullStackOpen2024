@@ -1,0 +1,16 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Alicia Keys",
+  "number": "347-489-4608"
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "",
+  "number": "347-489-4608"
+}
