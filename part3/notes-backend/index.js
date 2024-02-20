@@ -1,5 +1,28 @@
 const express = require('express')
 const cors = require('cors')
+const mongoose = require('mongoose')
+
+const password = process.env.DB_PASSWORD
+const url = `mongodb+srv://joshjavier:${password}@cluster0.32rttdd.mongodb.net/noteApp?retryWrites=true&w=majority`
+
+mongoose.connect(url)
+
+const noteSchema = new mongoose.Schema({
+  content: String,
+  important: Boolean,
+})
+
+noteSchema.set('toJSON', {
+  virtuals: true,
+  transform: (doc, ret) => {
+    delete ret._id
+    delete ret.__v
+    return ret
+  }
+})
+
+const Note = mongoose.model('Note', noteSchema)
+
 const app = express()
 
 const requestLogger = (req, res, next) => {
@@ -49,7 +72,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/notes', (req, res) => {
-  res.json(notes)
+  Note.find({}).then(notes => {
+    res.json(notes)
+  })
 })
 
 app.post('/api/notes', (req, res) => {
