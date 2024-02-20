@@ -11,23 +11,15 @@ app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :request-body'))
 app.use(express.static('dist'))
 
-const generateId = () => {
-  let id = 0
-  do {
-    id = Math.floor(Math.random() * 999)
-  } while (persons.map(p => p.id).includes(id));
-
-  return id
-}
-
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(persons => {
     res.json(persons)
   })
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', async (req, res) => {
   const body = req.body
+  const persons = await Person.find({})
 
   if (!body.name || !body.number) {
     return res.status(400).json({
@@ -39,13 +31,13 @@ app.post('/api/persons', (req, res) => {
     })
   }
 
-  const person = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  }
-  persons = persons.concat(person)
-  res.status(200).json(person)
+  })
+
+  const savedPerson = await person.save()
+  res.json(savedPerson)
 })
 
 app.get('/info', (req, res) => {
