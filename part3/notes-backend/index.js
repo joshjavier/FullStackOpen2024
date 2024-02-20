@@ -76,10 +76,14 @@ app.post('/api/notes', (req, res) => {
 })
 
 app.get('/api/notes/:id', (req, res) => {
-  Note.findById(req.params.id).then(note => {
-    if (!note) return res.sendStatus(404)
-    res.json(note)
-  })
+  Note.findById(req.params.id)
+    .then(note => {
+      if (!note) return res.sendStatus(404)
+      res.json(note)
+    })
+    .catch(error => {
+      res.status(400).json({ error: 'malformatted id'})
+    })
 })
 
 app.delete('/api/notes/:id', (req, res) => {

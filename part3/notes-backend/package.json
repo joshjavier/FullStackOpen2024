@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node --env-file=.env.local index.js",
+    "start": "node index.js",
     "dev": "nodemon --env-file=.env.local index.js",
     "build:ui": "rm -rf dist && cd ../../part2/notes && npm install && npm run build && cp -r dist ../../part3/backend",
     "deploy:full": "npm run build:ui && npm install",
