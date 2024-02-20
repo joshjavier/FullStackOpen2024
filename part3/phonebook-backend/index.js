@@ -11,10 +11,9 @@ app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :request-body'))
 app.use(express.static('dist'))
 
-app.get('/api/persons', (req, res) => {
-  Person.find({}).then(persons => {
-    res.json(persons)
-  })
+app.get('/api/persons', async (req, res) => {
+  const persons = await Person.find({})
+  res.json(persons)
 })
 
 app.post('/api/persons', async (req, res) => {
