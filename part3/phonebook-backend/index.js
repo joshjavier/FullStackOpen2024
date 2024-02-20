@@ -60,9 +60,23 @@ app.get('/api/persons/:id', (req, res) => {
   res.json(person)
 })
 
-app.delete('/api/persons/:id', async (req, res) => {
-  await Person.findByIdAndDelete(req.params.id)
-  res.sendStatus(204)
+app.delete('/api/persons/:id', async (req, res, next) => {
+  try {
+    await Person.findByIdAndDelete(req.params.id)
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.use((err, req, res, next) => {
+  console.error(err.message)
+
+  if (err.name === 'CastError') {
+    return res.status(400).json({ error: 'malformed id' })
+  }
+
+  next(err)
 })
 
 app.listen(port, () => {
