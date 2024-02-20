@@ -1,27 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const mongoose = require('mongoose')
-
-const password = process.env.DB_PASSWORD
-const url = `mongodb+srv://joshjavier:${password}@cluster0.32rttdd.mongodb.net/noteApp?retryWrites=true&w=majority`
-
-mongoose.connect(url)
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
-})
-
-noteSchema.set('toJSON', {
-  virtuals: true,
-  transform: (doc, ret) => {
-    delete ret._id
-    delete ret.__v
-    return ret
-  }
-})
-
-const Note = mongoose.model('Note', noteSchema)
+const Note = require('./models/note')
 
 const app = express()
 
@@ -117,7 +96,7 @@ app.delete('/api/notes/:id', (req, res) => {
 
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
