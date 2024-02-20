@@ -69,11 +69,24 @@ app.get('/api/notes/:id', (req, res, next) => {
     .catch(error => next(error))
 })
 
-app.delete('/api/notes/:id', (req, res) => {
-  const id = Number(req.params.id)
-  notes = notes.filter(note => note.id !== id)
+app.delete('/api/notes/:id', (req, res, next) => {
+  Note.findByIdAndDelete(req.params.id)
+    .then(response => {
+      res.sendStatus(204)
+    })
+    .catch(error => next(error))
+})
 
-  res.status(204).end()
+app.put('/api/notes/:id', (req, res, next) => {
+  const { content, important } = req.body
+
+  const note = { content, important }
+
+  Note.findByIdAndUpdate(req.params.id, note, { new: true })
+    .then(updatedNote => {
+      res.json(updatedNote)
+    })
+    .catch(error => next(error))
 })
 
 app.use(unknownEndpoint)
