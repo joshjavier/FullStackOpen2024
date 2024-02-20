@@ -2,7 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 
 const app = express()
-const port = process.env.PORT || 3001
+const port = process.env.PORT
 
 morgan.token('request-body', (req) => JSON.stringify(req.body))
 
