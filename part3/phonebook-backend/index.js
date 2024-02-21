@@ -39,7 +39,8 @@ app.post('/api/persons', async (req, res) => {
   res.json(savedPerson)
 })
 
-app.get('/info', (req, res) => {
+app.get('/info', async (req, res) => {
+  const persons = await Person.find({})
   const html = `
     <p>Phonebook has info for ${persons.length} people</p>
     <p>${Date()}</p>
@@ -47,17 +48,17 @@ app.get('/info', (req, res) => {
   res.send(html)
 })
 
-app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-
-  if (!persons.map(p => p.id).includes(id)) {
-    res.status(404).json({
-      error: "this person does not exist"
-    })
+app.get('/api/persons/:id', async (req, res, next) => {
+  try {
+    const person = await Person.findById(req.params.id)
+    if (person) {
+      res.json(person)
+    } else {
+      res.status(404).json({ error: 'this person does not exist' })
+    }
+  } catch (error) {
+    next(error)
   }
-
-  const person = persons.find(p => p.id === id)
-  res.json(person)
 })
 
 app.delete('/api/persons/:id', async (req, res, next) => {
