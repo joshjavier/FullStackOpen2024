@@ -60,9 +60,8 @@ app.get('/api/persons/:id', (req, res) => {
   res.json(person)
 })
 
-app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  persons = persons.filter(p => p.id !== id)
+app.delete('/api/persons/:id', async (req, res) => {
+  await Person.findByIdAndDelete(req.params.id)
   res.sendStatus(204)
 })
 
