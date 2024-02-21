@@ -2,11 +2,11 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
+const config = require('./utils/config')
 const blogsRouter = require('./controllers/blogs')
 
-const mongoUrl = process.env.MONGODB_URI
 console.log('Connecting to the database...')
-mongoose.connect(mongoUrl)
+mongoose.connect(config.MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB!')
   })
@@ -19,7 +19,6 @@ app.use(express.json())
 
 app.use('/api/blogs', blogsRouter)
 
-const PORT = process.env.PORT
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+app.listen(config.PORT, () => {
+  console.log(`Server running on port ${config.PORT}`)
 })
