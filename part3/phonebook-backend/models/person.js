@@ -22,6 +22,13 @@ const personSchema = new mongoose.Schema({
   number: {
     type: String,
     required: true,
+    minLength: 8,
+    validate: {
+      validator: (val) => {
+        return /^\d{2,3}-\d+$/.test(val)
+      },
+      message: 'Number should contain a single dash with 2-3 numbers on the left side (e.g. XXX-XXXX)'
+    }
   },
 })
 
