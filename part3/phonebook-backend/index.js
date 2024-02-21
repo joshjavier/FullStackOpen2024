@@ -69,6 +69,20 @@ app.delete('/api/persons/:id', async (req, res, next) => {
   }
 })
 
+app.put('/api/persons/:id', async (req, res, next) => {
+  try {
+    const { name, number } = req.body
+    const updatedPerson = await Person.findByIdAndUpdate(
+      req.params.id,
+      { name, number },
+      { new: true },
+    )
+    res.json(updatedPerson)
+  } catch (error) {
+    next(error)
+  }
+})
+
 app.use((err, req, res, next) => {
   console.error(err.message)
 
