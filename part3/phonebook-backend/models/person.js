@@ -6,7 +6,7 @@ console.log('Connecting to the database...')
 
 mongoose
   .connect(url)
-  .then(response => {
+  .then(() => {
     console.log('Connected to MongoDB!')
   })
   .catch(error => {
@@ -34,7 +34,7 @@ const personSchema = new mongoose.Schema({
 
 personSchema.set('toJSON', {
   virtuals: true,
-  transform: (doc, ret, options) => {
+  transform: (_doc, ret) => {
     delete ret._id
     delete ret.__v
     return ret

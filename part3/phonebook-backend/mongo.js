@@ -26,10 +26,10 @@ async function main() {
 
     const getAll = async () => {
       await Person.find({}).then(persons => {
-        console.log('phonebook:');
+        console.log('phonebook:')
         persons.forEach(person => {
           console.log(person.name, person.number)
-        });
+        })
       })
     }
 
