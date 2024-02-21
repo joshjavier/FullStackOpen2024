@@ -16,27 +16,21 @@ app.get('/api/persons', async (req, res) => {
   res.json(persons)
 })
 
-app.post('/api/persons', async (req, res) => {
-  const body = req.body
-  const persons = await Person.find({})
+app.post('/api/persons', async (req, res, next) => {
+  try {
+    const { name, number } = req.body
+    const persons = await Person.find({})
 
-  if (!body.name || !body.number) {
-    return res.status(400).json({
-      error: 'name or number is missing'
-    })
-  } else if (persons.map(p => p.name).includes(body.name)) {
-    return res.status(400).json({
-      error: 'name must be unique'
-    })
+    if (persons.map(p => p.name).includes(name)) {
+      return res.status(400).json({ error: 'name must be unique' })
+    }
+
+    const person = new Person({ name, number })
+    const savedPerson = await person.save()
+    res.json(savedPerson)
+  } catch (error) {
+    next(error)
   }
-
-  const person = new Person({
-    name: body.name,
-    number: body.number,
-  })
-
-  const savedPerson = await person.save()
-  res.json(savedPerson)
 })
 
 app.get('/info', async (req, res) => {
@@ -76,7 +70,7 @@ app.put('/api/persons/:id', async (req, res, next) => {
     const updatedPerson = await Person.findByIdAndUpdate(
       req.params.id,
       { name, number },
-      { new: true },
+      { new: true, runValidators: true },
     )
     res.json(updatedPerson)
   } catch (error) {
@@ -89,6 +83,8 @@ app.use((err, req, res, next) => {
 
   if (err.name === 'CastError') {
     return res.status(400).json({ error: 'malformed id' })
+  } else if (err.name === 'ValidationError') {
+    return res.status(400).json({ error: err.message })
   }
 
   next(err)

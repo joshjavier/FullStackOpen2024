@@ -50,16 +50,20 @@ const App = () => {
         phonebookService
           .update(existingPerson.id, updatedPerson)
           .then(updatedPerson => {
-            setPersons(persons => persons.map(person => (
-              person.id !== updatedPerson.id ? person : updatedPerson
-            )))
-            setNewName('')
-            setNewNumber('')
-            setSuccessMsg(`Updated number for ${updatedPerson.name}`)
+            if (updatedPerson) {
+              setPersons(persons => persons.map(person => (
+                person.id !== updatedPerson.id ? person : updatedPerson
+              )))
+              setNewName('')
+              setNewNumber('')
+              setSuccessMsg(`Updated number for ${updatedPerson.name}`)
+            } else {
+              setErrorMsg(`Information of ${existingPerson.name} has already been removed from the server`)
+              setPersons(persons => persons.filter(p => p.id !== existingPerson.id))
+            }
           })
           .catch(error => {
-            setErrorMsg(`Information of ${existingPerson.name} has already been removed from the server`)
-            setPersons(persons => persons.filter(p => p.id !== existingPerson.id))
+            setErrorMsg(error.response.data.error)
           })
       }
     } else {
@@ -72,6 +76,9 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setSuccessMsg(`Added ${newPerson.name}`)
+        })
+        .catch(error => {
+          setErrorMsg(error.response.data.error)
         })
     }
   }
