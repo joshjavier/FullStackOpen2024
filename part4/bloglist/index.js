@@ -12,8 +12,15 @@ const blogSchema = new mongoose.Schema({
 
 const Blog = mongoose.model('Blog', blogSchema)
 
-const mongoUrl = 'mongodb://localhost/bloglist'
+const mongoUrl = process.env.MONGODB_URI
+console.log('Connecting to the database...')
 mongoose.connect(mongoUrl)
+  .then(() => {
+    console.log('Connected to MongoDB!')
+  })
+  .catch(error => {
+    console.log(error)
+  })
 
 app.use(cors())
 app.use(express.json())
@@ -36,7 +43,7 @@ app.post('/api/blogs', (request, response) => {
     })
 })
 
-const PORT = 3003
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
