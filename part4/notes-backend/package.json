@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon --env-file=.env.local index.js",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon --env-file=.env.local index.js",
+    "test": "NODE_ENV=test node --env-file=.env.local --test",
     "lint": "eslint .",
     "build:ui": "rm -rf dist && cd ../../part2/notes && npm install && npm run build && cp -r dist ../../part3/notes-backend",
-    "deploy:full": "npm run build:ui && npm install",
-    "test": "node --test"
+    "deploy:full": "npm run build:ui && npm install"
   },
   "keywords": [],
   "author": "Josh Javier",
