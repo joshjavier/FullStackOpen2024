@@ -27,6 +27,12 @@ describe('blog list app', () => {
 
     assert.strictEqual(result.body.length, helper.initialBlogs.length)
   })
+
+  it('defines id prop for each blog post', async () => {
+    const result = await api.get('/api/blogs')
+    const blog = result.body[0]
+    assert('id' in blog)
+  })
 })
 
 after(async () => {
