@@ -1,12 +1,12 @@
 const { after, beforeEach, describe, it } = require('node:test')
 const assert = require('node:assert/strict')
-const supertest = require('supertest')
+const request = require('supertest')
 const app = require('../app')
 const mongoose = require('mongoose')
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
-const api = supertest(app)
+const api = request(app)
 
 beforeEach(async () => {
   // clear test database
@@ -20,17 +20,17 @@ beforeEach(async () => {
 
 describe('blog list app', () => {
   it('returns the correct number of blog posts in JSON', async () => {
-    const result = await api
+    const response = await api
       .get('/api/blogs')
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    assert.strictEqual(result.body.length, helper.initialBlogs.length)
+    assert.strictEqual(response.body.length, helper.initialBlogs.length)
   })
 
   it('defines id prop for each blog post', async () => {
-    const result = await api.get('/api/blogs')
-    const blog = result.body[0]
+    const response = await api.get('/api/blogs')
+    const blog = response.body[0]
     assert('id' in blog)
   })
 })
