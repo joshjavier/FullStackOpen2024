@@ -37,7 +37,7 @@ describe('GET /api/blogs', () => {
 
 describe('POST /api/blogs', () => {
   const blog = {
-    title: 'Don\'t Make a Blog, Make a Brain Dump',
+    title: "Don't Make a Blog, Make a Brain Dump",
     author: 'Bradley Taunt',
     url: 'https://btxx.org/posts/dump/',
     likes: 0,
