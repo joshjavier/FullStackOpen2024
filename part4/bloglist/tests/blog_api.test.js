@@ -28,7 +28,7 @@ describe('GET /api/blogs', () => {
     assert.strictEqual(response.body.length, helper.initialBlogs.length)
   })
 
-  it('each blog post has an id prop', async () => {
+  it('each blog post has an `id` prop', async () => {
     const response = await api.get('/api/blogs')
     const blog = response.body[0]
     assert('id' in blog)
@@ -41,6 +41,12 @@ describe('POST /api/blogs', () => {
     author: 'Bradley Taunt',
     url: 'https://btxx.org/posts/dump/',
     likes: 0,
+  }
+
+  const blogWithoutLikes = {
+    title: 'I Tested and Ranked the Best Ways to Cut Onions Without Crying',
+    author: 'Wil Fulton',
+    url: 'https://www.thrillist.com/eat/nation/i-tested-and-ranked-the-best-ways-to-cut-an-onion-without-crying',
   }
 
   it('returns the created blog in JSON', async () => {
@@ -58,6 +64,16 @@ describe('POST /api/blogs', () => {
     await api.post('/api/blogs').send(blog)
     const blogsAtEnd = await helper.blogsInDb()
     assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+  })
+
+  it('`likes` prop defaults to 0 if missing from request body', async () => {
+    const response = await api
+      .post('/api/blogs')
+      .send(blogWithoutLikes)
+      .expect(201)
+
+    const createdBlog = response.body
+    assert.strictEqual(createdBlog.likes, 0)
   })
 })
 
