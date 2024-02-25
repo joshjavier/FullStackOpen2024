@@ -18,7 +18,7 @@ beforeEach(async () => {
   await Promise.all(saveBlogsToDb)
 })
 
-describe('blog list app', () => {
+describe('GET /api/blogs', () => {
   it('returns the correct number of blog posts in JSON', async () => {
     const response = await api
       .get('/api/blogs')
@@ -28,7 +28,7 @@ describe('blog list app', () => {
     assert.strictEqual(response.body.length, helper.initialBlogs.length)
   })
 
-  it('defines id prop for each blog post', async () => {
+  it('each blog post has an id prop', async () => {
     const response = await api.get('/api/blogs')
     const blog = response.body[0]
     assert('id' in blog)
