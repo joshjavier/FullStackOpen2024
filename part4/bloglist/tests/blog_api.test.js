@@ -75,6 +75,16 @@ describe('POST /api/blogs', () => {
     const createdBlog = response.body
     assert.strictEqual(createdBlog.likes, 0)
   })
+
+  it('responds with 400 Bad Request when `title` prop is missing', async () => {
+    const blogWithoutTitle = { author: 'author', url: 'url' }
+    await api.post('/api/blogs').send(blogWithoutTitle).expect(400)
+  })
+
+  it('responds with 400 Bad Request when `url` prop is missing', async () => {
+    const blogWithoutURL = { title: 'title', author: 'author' }
+    await api.post('/api/blogs').send(blogWithoutURL).expect(400)
+  })
 })
 
 after(async () => {
