@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 
-usersRouter.post('/', async (req, res) => {
+usersRouter.post('/', async (req, res, next) => {
   const { username, name, password } = req.body
 
   const saltRounds = 10
@@ -14,9 +14,12 @@ usersRouter.post('/', async (req, res) => {
     passwordHash,
   })
 
-  const savedUser = await user.save()
-
-  res.status(201).json(savedUser)
+  try {
+    const savedUser = await user.save()
+    res.status(201).json(savedUser)
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = usersRouter
