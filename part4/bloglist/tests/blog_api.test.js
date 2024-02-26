@@ -116,6 +116,46 @@ describe('DELETE /api/blogs/:id', () => {
   })
 })
 
+describe('PUT /api/blogs/:id', () => {
+  beforeEach(async () => {
+    const blog = {
+      title: 'Write Dumb Code',
+      author: 'Matthew Rocklin',
+      url: 'https://matthewrocklin.com/write-dumb-code.html',
+    }
+    await api.post('/api/blogs').send(blog).expect(201)
+  })
+
+  const updatedBlog = {
+    title: 'Write Dumb Code',
+    author: 'Matthew Rocklin',
+    url: 'https://matthewrocklin.com/write-dumb-code.html',
+    likes: 49,
+  }
+
+  it('returns 200 OK with the updated blog in JSON', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[blogsAtStart.length - 1]
+    const id = blogToUpdate.id
+
+    await api
+      .put(`/api/blogs/${id}`)
+      .send(updatedBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  it('does not increase the number of blog posts', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const id = blogsAtStart[blogsAtStart.length - 1].id
+
+    await api.put(`/api/blogs/${id}`).send(updatedBlog)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
