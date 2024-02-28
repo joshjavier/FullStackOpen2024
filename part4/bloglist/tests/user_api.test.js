@@ -30,6 +30,62 @@ describe('adding a new user', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
   })
+
+  it('fails when username or password is missing', async () => {
+    const usernameOnly = { username: 'username' }
+    const passwordOnly = { password: 'password' }
+
+    const resUsernameOnly = await api.post('/api/users').send(usernameOnly).expect(400)
+    const resPasswordOnly = await api.post('/api/users').send(passwordOnly).expect(400)
+
+    assert(resUsernameOnly.body.error.includes('required'))
+    assert(resPasswordOnly.body.error.includes('required'))
+  })
+
+  it('fails when username is less than 3 characters', async () => {
+    const user = {
+      username: 'hi',
+      password: 'welcome123',
+    }
+
+    const response = await api
+      .post('/api/users')
+      .send(user)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    assert(response.body.error.includes('User validation failed'))
+  })
+
+  it('fails when password is less than 3 characters', async () => {
+    const user = {
+      username: 'claptrap',
+      password: 'hi',
+    }
+
+    const response = await api
+      .post('/api/users')
+      .send(user)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    assert(response.body.error.includes('password must be at least 3 characters'))
+  })
+
+  it('fails when username is not unique', async () => {
+    const user = {
+      username: 'root',
+      password: 'root',
+    }
+
+    const response = await api
+      .post('/api/users')
+      .send(user)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    assert(response.body.error.includes('username must be unique'))
+  })
 })
 
 describe('getting the list of all users', () => {
