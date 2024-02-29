@@ -4,15 +4,25 @@ const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
 const request = require('supertest')
 const app = require('../app')
+const helper = require('./test_helper')
 const User = require('../models/user')
+const Blog = require('../models/blog')
 
 const api = request(app)
 
 beforeEach(async () => {
   await User.deleteMany({})
+  await Blog.deleteMany({})
 
+  // add initial user
   const passwordHash = await bcrypt.hash('root', 10)
   const user = new User({ username: 'root', passwordHash })
+  await user.save()
+
+  // add initial data
+  const blogs = helper.initialBlogs.map(blog => new Blog({ ...blog, user: user.id }))
+  await Blog.insertMany(blogs)
+  user.blogs = user.blogs.concat(blogs.map(blog => blog.id))
   await user.save()
 })
 
@@ -96,6 +106,12 @@ describe('getting the list of all users', () => {
       .expect('Content-Type', /application\/json/)
 
     assert.strictEqual(response.body.length, 1)
+  })
+
+  it('each user should have a `blogs` prop containing array of blogs they created', async () => {
+    const response = await api.get('/api/users').expect(200)
+    const users = response.body
+    assert(users.every(user => 'blogs' in user))
   })
 })
 
