@@ -30,46 +30,46 @@ describe('GET /api/blogs', () => {
 
   it('each blog post has an `id` prop', async () => {
     const response = await api.get('/api/blogs')
-    const blog = response.body[0]
-    assert('id' in blog)
+    const blogs = response.body
+    assert(blogs.every(blog => 'id' in blog))
   })
 })
 
 describe('POST /api/blogs', () => {
-  const blog = {
-    title: "Don't Make a Blog, Make a Brain Dump",
-    author: 'Bradley Taunt',
-    url: 'https://btxx.org/posts/dump/',
-    likes: 0,
-  }
-
-  const blogWithoutLikes = {
-    title: 'I Tested and Ranked the Best Ways to Cut Onions Without Crying',
-    author: 'Wil Fulton',
-    url: 'https://www.thrillist.com/eat/nation/i-tested-and-ranked-the-best-ways-to-cut-an-onion-without-crying',
+  const testBlog = {
+    title: 'Untitled',
+    author: 'John Doe',
+    url: 'https://example.com',
+    likes: 99,
   }
 
   it('returns the created blog in JSON', async () => {
     const response = await api
       .post('/api/blogs')
-      .send(blog)
+      .send(testBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
     const createdBlog = response.body
-    assert.deepStrictEqual(createdBlog, { ...blog, id: createdBlog.id })
+    assert.deepStrictEqual(createdBlog, { ...testBlog, id: createdBlog.id })
   })
 
   it('increases the number of blog posts by one', async () => {
-    await api.post('/api/blogs').send(blog)
+    await api.post('/api/blogs').send(testBlog)
     const blogsAtEnd = await helper.blogsInDb()
     assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
   })
 
   it('`likes` prop defaults to 0 if missing from request body', async () => {
+    const testBlogNoLikes = {
+      title: 'This blog post has no likes',
+      author: 'John Doe',
+      url: 'https://example.com',
+    }
+
     const response = await api
       .post('/api/blogs')
-      .send(blogWithoutLikes)
+      .send(testBlogNoLikes)
       .expect(201)
 
     const createdBlog = response.body
