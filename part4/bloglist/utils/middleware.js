@@ -22,6 +22,8 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400).json({ error: err.message })
   } else if (err.name === 'MongoServerError' && err.message.includes('E11000 duplicate key error')) {
     return res.status(400).json({ error: 'username must be unique' })
+  } else if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
+    return res.status(401).json({ error: err.message })
   }
 
   next(err)
