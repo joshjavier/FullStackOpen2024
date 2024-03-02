@@ -129,30 +129,42 @@ describe('POST /api/blogs', () => {
 
 describe('DELETE /api/blogs/:id', () => {
   beforeEach(async () => {
-    const user = await User.findOne()
+    const response = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'root' })
+      .expect(200)
+
+    token = response.body.token
 
     const blog = {
       title: 'Marginalia: 3 Years',
       author: 'Viktor Lofgren',
       url: 'https://www.marginalia.nu/log/a_101_marginalia-3-years/',
       likes: 107,
-      user: user.id,
     }
-    await api.post('/api/blogs').send(blog).expect(201)
+
+    await api.post('/api/blogs')
+      .auth(token, { type: 'bearer' })
+      .send(blog)
+      .expect(201)
   })
 
   it('returns 204 No Content', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const id = blogsAtStart[blogsAtStart.length - 1].id
 
-    await api.delete(`/api/blogs/${id}`).expect(204)
+    await api.delete(`/api/blogs/${id}`)
+      .auth(token, { type: 'bearer' })
+      .expect(204)
   })
 
   it('reduces the number of blog posts by one', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const id = blogsAtStart[blogsAtStart.length - 1].id
 
-    await api.delete(`/api/blogs/${id}`).expect(204)
+    await api.delete(`/api/blogs/${id}`)
+      .auth(token, { type: 'bearer' })
+      .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
     assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
