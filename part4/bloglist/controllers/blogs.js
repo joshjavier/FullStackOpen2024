@@ -10,12 +10,9 @@ blogsRouter.get('/', async (req, res) => {
 
 blogsRouter.post('/', async (req, res, next) => {
   try {
-    const auth = req.get('Authorization')
-    const token = auth ? auth.replace('Bearer ', '') : null
-    const payload = jwt.verify(token, process.env.SECRET)
-
     const { title, author, url, likes } = req.body
 
+    const payload = jwt.verify(req.token, process.env.SECRET)
     const user = await User.findById(payload.id)
 
     const blog = new Blog({
