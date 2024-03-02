@@ -36,6 +36,11 @@ blogsRouter.post('/', async (req, res, next) => {
 blogsRouter.delete('/:id', async (req, res, next) => {
   const id = req.params.id
   try {
+    const payload = jwt.verify(req.token, process.env.SECRET)
+    const blog = await Blog.findById(id)
+    if (blog.user.toString() !== payload.id) {
+      return res.status(401).json({ error: "you can't delete notes you didn't create" })
+    }
     await Blog.findByIdAndDelete(id)
     res.sendStatus(204)
   } catch (error) {
