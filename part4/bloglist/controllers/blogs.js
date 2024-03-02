@@ -1,7 +1,5 @@
 const blogsRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
-const User = require('../models/user')
 
 blogsRouter.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('user', '-blogs')
@@ -11,9 +9,7 @@ blogsRouter.get('/', async (req, res) => {
 blogsRouter.post('/', async (req, res, next) => {
   try {
     const { title, author, url, likes } = req.body
-
-    const payload = jwt.verify(req.token, process.env.SECRET)
-    const user = await User.findById(payload.id)
+    const user = req.user
 
     const blog = new Blog({
       title,
@@ -34,11 +30,11 @@ blogsRouter.post('/', async (req, res, next) => {
 })
 
 blogsRouter.delete('/:id', async (req, res, next) => {
-  const id = req.params.id
   try {
-    const payload = jwt.verify(req.token, process.env.SECRET)
+    const id = req.params.id
+    const user = req.user
     const blog = await Blog.findById(id)
-    if (blog.user.toString() !== payload.id) {
+    if (blog.user.toString() !== user.id) {
       return res.status(401).json({ error: "you can't delete notes you didn't create" })
     }
     await Blog.findByIdAndDelete(id)
