@@ -10,6 +10,8 @@ const helper = require('./test_helper')
 
 const api = request(app)
 
+let token
+
 beforeEach(async () => {
   await Blog.deleteMany({})
   await User.deleteMany({})
@@ -57,39 +59,48 @@ describe('POST /api/blogs', () => {
     likes: 99,
   }
 
-  it('returns the created blog in JSON', async () => {
-    const user = await User.findOne()
+  beforeEach(async () => {
+    const response = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'root' })
+      .expect(200)
 
+    token = response.body.token
+  })
+
+  it('returns the created blog in JSON', async () => {
     const response = await api
       .post('/api/blogs')
-      .send({ ...testBlog, user: user.id })
+      .auth(token, { type: 'bearer' })
+      .send(testBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
     const createdBlog = response.body
-    assert.deepStrictEqual(createdBlog, { ...testBlog, id: createdBlog.id, user: user.id })
+    assert.strictEqual(createdBlog.author, 'John Doe')
+    assert.strictEqual(createdBlog.title, 'Untitled')
+    assert.strictEqual(createdBlog.likes, 99)
+    assert('id' in createdBlog)
+    assert('user' in createdBlog)
   })
 
   it('increases the number of blog posts by one', async () => {
     const blogsAtStart = await helper.blogsInDb()
-    const user = await User.findOne()
-    await api.post('/api/blogs').send({ ...testBlog, user: user.id })
+    await api.post('/api/blogs').auth(token, { type: 'bearer' }).send(testBlog)
     const blogsAtEnd = await helper.blogsInDb()
     assert.strictEqual(blogsAtEnd.length, blogsAtStart.length + 1)
   })
 
   it('`likes` prop defaults to 0 if missing from request body', async () => {
-    const user = await User.findOne()
-
     const testBlogNoLikes = {
       title: 'This blog post has no likes',
       author: 'John Doe',
       url: 'https://example.com',
-      user: user.id,
     }
 
     const response = await api
       .post('/api/blogs')
+      .auth(token, { type: 'bearer' })
       .send(testBlogNoLikes)
       .expect(201)
 
@@ -98,15 +109,21 @@ describe('POST /api/blogs', () => {
   })
 
   it('responds with 400 Bad Request when `title` prop is missing', async () => {
-    const user = await User.findOne()
-    const blogWithoutTitle = { author: 'author', url: 'url', user: user.id }
-    await api.post('/api/blogs').send(blogWithoutTitle).expect(400)
+    const blogWithoutTitle = { author: 'author', url: 'url' }
+    await api
+      .post('/api/blogs')
+      .auth(token, { type: 'bearer' })
+      .send(blogWithoutTitle)
+      .expect(400)
   })
 
   it('responds with 400 Bad Request when `url` prop is missing', async () => {
-    const user = await User.findOne()
-    const blogWithoutURL = { title: 'title', author: 'author', user: user.id }
-    await api.post('/api/blogs').send(blogWithoutURL).expect(400)
+    const blogWithoutURL = { title: 'title', author: 'author' }
+    await api
+      .post('/api/blogs')
+      .auth(token, { type: 'bearer' })
+      .send(blogWithoutURL)
+      .expect(400)
   })
 })
 
