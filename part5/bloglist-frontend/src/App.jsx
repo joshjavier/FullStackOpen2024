@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -15,6 +16,16 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+
+  let timeoutId
+
+  const clearAlert = () => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
@@ -63,7 +74,8 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      console.log(error.response.data)
+      setErrorMessage({ body: error.response.data.error })
+      clearAlert()
     }
   }
 
@@ -71,6 +83,11 @@ const App = () => {
     localStorage.removeItem('bloglistUser')
     setUser(null)
     blogService.setToken(null)
+    setErrorMessage({
+      success: true,
+      body: 'you\'ve been logged out',
+    })
+    clearAlert()
   }
 
   const onCreate = async () => {
@@ -80,14 +97,23 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
+
+      setErrorMessage({
+        success: true,
+        body: `a new blog ${newBlog.title} by ${newBlog.author} added`,
+      })
+      clearAlert()
     } catch (error) {
-      console.log(error.response.data)
+      setErrorMessage({ body: error.response.data.error })
+      clearAlert()
     }
   }
 
   return user ? (
     <div>
       <h2>blogs</h2>
+
+      <Notification errorMessage={errorMessage} />
 
       <p>
         {user.name}
@@ -112,6 +138,9 @@ const App = () => {
   ) : (
     <div>
       <h2>log in to application</h2>
+
+      <Notification errorMessage={errorMessage} />
+
       <LoginForm
         onSubmit={onLogin}
         onChange={onChange}
