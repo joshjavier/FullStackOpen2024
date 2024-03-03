@@ -176,6 +176,28 @@ describe('DELETE /api/blogs/:id', () => {
     const blogsAtEnd = await helper.blogsInDb()
     assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
   })
+
+  it("fails if blog isn't created by the authenticated user", async () => {
+    // create a new user
+    const passwordHash = await bcrypt.hash('newuser', 10)
+    const newuser = new User({ username: 'newuser', passwordHash })
+    await newuser.save()
+
+    // login with the new user
+    const login = await api.post('/api/login').send({ username: 'newuser', password: 'newuser' })
+    token = login.body.token
+
+    // try deleting the blog post made by root user
+    const blogsAtStart = await helper.blogsInDb()
+    const id = blogsAtStart[blogsAtStart.length - 1].id
+
+    await api.delete(`/api/blogs/${id}`)
+      .auth(token, { type: 'bearer' })
+      .expect(403)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
+  })
 })
 
 describe('PUT /api/blogs/:id', () => {

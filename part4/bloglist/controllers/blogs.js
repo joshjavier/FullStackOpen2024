@@ -35,9 +35,9 @@ blogsRouter.delete('/:id', async (req, res, next) => {
     const user = req.user
     const blog = await Blog.findById(id)
     if (blog.user.toString() !== user.id) {
-      return res.status(401).json({ error: "you can't delete notes you didn't create" })
+      return res.status(403).json({ error: "you can't delete notes you didn't create" })
     }
-    await Blog.findByIdAndDelete(id)
+    await blog.deleteOne()
     res.sendStatus(204)
   } catch (error) {
     next(error)
