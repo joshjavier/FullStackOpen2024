@@ -55,30 +55,31 @@ const App = () => {
     setUser(null)
   }
 
-  return (
+  return user ? (
     <div>
       <h2>blogs</h2>
 
-      {user ? (
-        <p>
-          {user.name}
-          {' '}
-          logged in
-          {' '}
-          <button onClick={onLogout}>log out</button>
-        </p>
-      ) : (
-        <LoginForm
-          onSubmit={onLogin}
-          onChange={onChange}
-          username={username}
-          password={password}
-        />
-      )}
+      <p>
+        {user.name}
+        {' '}
+        logged in
+        {' '}
+        <button onClick={onLogout}>log out</button>
+      </p>
 
       {blogs.map(blog => (
         <Blog key={blog.id} blog={blog} />
       ))}
+    </div>
+  ) : (
+    <div>
+      <h2>log in to application</h2>
+      <LoginForm
+        onSubmit={onLogin}
+        onChange={onChange}
+        username={username}
+        password={password}
+      />
     </div>
   )
 }
