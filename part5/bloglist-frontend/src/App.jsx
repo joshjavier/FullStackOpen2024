@@ -18,6 +18,13 @@ const App = () => {
     })
   }, [])
 
+  useEffect(() => {
+    const userJSON = localStorage.getItem('bloglistUser')
+    if (userJSON) {
+      setUser(JSON.parse(userJSON))
+    }
+  }, [])
+
   const onChange = (event) => {
     if (event.target.name === 'username') {
       setUsername(event.target.value)
@@ -33,12 +40,19 @@ const App = () => {
 
     try {
       const user = await loginService.login({ username, password })
+
+      localStorage.setItem('bloglistUser', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (error) {
       console.log(error.response.data)
     }
+  }
+
+  const onLogout = () => {
+    localStorage.removeItem('bloglistUser')
+    setUser(null)
   }
 
   return (
@@ -50,6 +64,8 @@ const App = () => {
           {user.name}
           {' '}
           logged in
+          {' '}
+          <button onClick={onLogout}>log out</button>
         </p>
       ) : (
         <LoginForm
