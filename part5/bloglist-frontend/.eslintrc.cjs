@@ -21,5 +21,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
     'react/prop-types': 'off',
+    '@stylistic/brace-style': 'off',
+    '@stylistic/multiline-ternary': 'off',
   },
 }
