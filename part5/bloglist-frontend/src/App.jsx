@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -11,6 +12,9 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
@@ -21,17 +25,29 @@ const App = () => {
   useEffect(() => {
     const userJSON = localStorage.getItem('bloglistUser')
     if (userJSON) {
-      setUser(JSON.parse(userJSON))
+      const user = JSON.parse(userJSON)
+      setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
   const onChange = (event) => {
-    if (event.target.name === 'username') {
-      setUsername(event.target.value)
-    }
-
-    if (event.target.name === 'password') {
-      setPassword(event.target.value)
+    switch (event.target.name) {
+      case 'username':
+        setUsername(event.target.value)
+        break
+      case 'password':
+        setPassword(event.target.value)
+        break
+      case 'title':
+        setTitle(event.target.value)
+        break
+      case 'author':
+        setAuthor(event.target.value)
+        break
+      case 'url':
+        setUrl(event.target.value)
+        break
     }
   }
 
@@ -42,6 +58,7 @@ const App = () => {
       const user = await loginService.login({ username, password })
 
       localStorage.setItem('bloglistUser', JSON.stringify(user))
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -53,6 +70,19 @@ const App = () => {
   const onLogout = () => {
     localStorage.removeItem('bloglistUser')
     setUser(null)
+    blogService.setToken(null)
+  }
+
+  const onCreate = async () => {
+    try {
+      const newBlog = await blogService.create({ title, author, url })
+      setBlogs(blogs.concat(newBlog))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch (error) {
+      console.log(error.response.data)
+    }
   }
 
   return user ? (
@@ -66,6 +96,14 @@ const App = () => {
         {' '}
         <button onClick={onLogout}>log out</button>
       </p>
+
+      <BlogForm
+        onChange={onChange}
+        onCreate={onCreate}
+        title={title}
+        author={author}
+        url={url}
+      />
 
       {blogs.map(blog => (
         <Blog key={blog.id} blog={blog} />
