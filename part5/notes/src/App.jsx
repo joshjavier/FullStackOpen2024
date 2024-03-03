@@ -8,6 +8,7 @@ import Notification from './components/Notification'
 import Footer from './components/Footer'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
+import Toggleable from './components/Toggleable'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -124,12 +125,14 @@ const App = () => {
           />
         </div>
       ) : (
-        <LoginForm
-          onSubmit={onLogin}
-          username={username}
-          password={password}
-          onChange={onChange}
-        />
+        <Toggleable buttonLabel='login'>
+          <LoginForm
+            onSubmit={onLogin}
+            username={username}
+            password={password}
+            onChange={onChange}
+          />
+        </Toggleable>
       )}
 
       <div>
