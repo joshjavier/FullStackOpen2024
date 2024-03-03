@@ -120,7 +120,7 @@ const App = () => {
           <p>Hello {user.name}!</p>
           <NoteForm
             onSubmit={addNote}
-            newNote={newNote}
+            value={newNote}
             onChange={onChange}
           />
         </div>
