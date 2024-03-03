@@ -32,4 +32,14 @@ usersRouter.post('/', async (req, res, next) => {
   }
 })
 
+// fast way to delete users. DEV ONLY!
+usersRouter.delete('/:id', async (req, res, next) => {
+  try {
+    await User.findByIdAndDelete(req.params.id)
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = usersRouter
