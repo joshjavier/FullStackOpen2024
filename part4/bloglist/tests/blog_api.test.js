@@ -125,6 +125,13 @@ describe('POST /api/blogs', () => {
       .send(blogWithoutURL)
       .expect(400)
   })
+
+  it('fails if a token is invalid or not provided', async () => {
+    // missing token
+    await api.post('/api/blogs').send(testBlog).expect(401)
+    // invalid token
+    await api.post('/api/blogs').auth(null, { type: 'bearer' }).send(testBlog).expect(401)
+  })
 })
 
 describe('DELETE /api/blogs/:id', () => {

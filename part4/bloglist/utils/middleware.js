@@ -41,12 +41,16 @@ const tokenExtractor = (req, res, next) => {
 }
 
 const userExtractor = async (req, res, next) => {
-  if (req.method === 'POST' || req.method === 'DELETE') {
-    const payload = jwt.verify(req.token, process.env.SECRET)
-    const user = await User.findById(payload.id)
-    req.user = user
+  try {
+    if (req.method === 'POST' || req.method === 'DELETE') {
+      const payload = jwt.verify(req.token, process.env.SECRET)
+      const user = await User.findById(payload.id)
+      req.user = user
+    }
+    next()
+  } catch (error) {
+    next(error)
   }
-  next()
 }
 
 module.exports = {
