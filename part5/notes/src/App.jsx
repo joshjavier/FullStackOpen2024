@@ -1,65 +1,13 @@
 import { useEffect, useState } from 'react'
+
 import noteService from './services/notes'
 import loginService from './services/login'
+
 import Note from './components/Note'
 import Notification from './components/Notification'
-
-const Footer = () => {
-  const footerStyle = {
-    color: 'green',
-    fontStyle: 'italic',
-    fontSize: 16,
-  }
-
-  return (
-    <div style={footerStyle}>
-      <br />
-      <em>Note app, Department of Computer Science, University of Helsinki 2024</em>
-    </div>
-  )
-}
-
-const LoginForm = ({ onSubmit, username, password, onChange }) => {
-  return (
-    <form onSubmit={onSubmit}>
-      <div>
-        <label htmlFor="input-username">username</label>{" "}
-        <input
-          type="text"
-          id='input-username'
-          name='username'
-          value={username}
-          onChange={onChange}
-        />
-      </div>
-      <div>
-        <label htmlFor="input-password">password</label>{" "}
-        <input
-          type="password"
-          id='input-password'
-          name='password'
-          value={password}
-          onChange={onChange}
-        />
-      </div>
-      <button>login</button>
-    </form>
-  )
-}
-
-const NoteForm = ({ onSubmit, newNote, onChange }) => {
-  return (
-    <form onSubmit={onSubmit}>
-      <input
-        type="text"
-        name="note"
-        value={newNote}
-        onChange={onChange}
-      />
-      <button>save</button>
-    </form>
-  )
-}
+import Footer from './components/Footer'
+import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
 
 const App = () => {
   const [notes, setNotes] = useState([])
