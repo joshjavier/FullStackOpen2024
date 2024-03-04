@@ -12,7 +12,6 @@ import Toggleable from './components/Toggleable'
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
   const [username, setUsername] = useState('')
@@ -57,18 +56,17 @@ const App = () => {
       })
   }
 
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    }
-
+  const createNote = (noteObject) => {
     noteService
       .create(noteObject)
-      .then(returnedNote => {
-        setNotes(notes => [...notes, returnedNote])
-        setNewNote('')
+      .then(createdNote => {
+        setNotes(notes.concat(createdNote))
+      })
+      .catch(error => {
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000);
       })
   }
 
@@ -103,10 +101,6 @@ const App = () => {
     if (event.target.name === 'password') {
       setPassword(event.target.value)
     }
-
-    if (event.target.name === 'note') {
-      setNewNote(event.target.value)
-    }
   }
 
   return (
@@ -118,11 +112,7 @@ const App = () => {
       {user ? (
         <div>
           <p>Hello {user.name}!</p>
-          <NoteForm
-            onSubmit={addNote}
-            value={newNote}
-            onChange={onChange}
-          />
+          <NoteForm createNote={createNote} />
         </div>
       ) : (
         <Toggleable buttonLabel='login'>
