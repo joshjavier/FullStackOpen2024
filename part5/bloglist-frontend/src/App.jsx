@@ -14,9 +14,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const blogFormRef = useRef(null)
 
@@ -58,15 +55,6 @@ const App = () => {
       case 'password':
         setPassword(event.target.value)
         break
-      case 'title':
-        setTitle(event.target.value)
-        break
-      case 'author':
-        setAuthor(event.target.value)
-        break
-      case 'url':
-        setUrl(event.target.value)
-        break
     }
   }
 
@@ -98,20 +86,20 @@ const App = () => {
     clearAlert()
   }
 
-  const onCreate = async () => {
+  const createBlog = async (blogObject) => {
     try {
-      const newBlog = await blogService.create({ title, author, url })
+      const newBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(newBlog))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
 
       blogFormRef.current.toggleVisibility()
+
       setErrorMessage({
         success: true,
         body: `a new blog ${newBlog.title} by ${newBlog.author} added`,
       })
       clearAlert()
+
+      return newBlog
     } catch (error) {
       setErrorMessage({ body: error.response.data.error })
       clearAlert()
@@ -133,13 +121,7 @@ const App = () => {
       </p>
 
       <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
-        <BlogForm
-          onChange={onChange}
-          onCreate={onCreate}
-          title={title}
-          author={author}
-          url={url}
-        />
+        <BlogForm createBlog={createBlog} />
       </Toggleable>
 
       {blogs.map(blog => (

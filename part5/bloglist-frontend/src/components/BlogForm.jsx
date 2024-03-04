@@ -1,6 +1,24 @@
-const BlogForm = ({ onChange, onCreate, title, author, url }) => {
+import { useState } from 'react'
+
+const BlogForm = ({ createBlog }) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const onCreate = async (event) => {
+    event.preventDefault()
+
+    const newBlog = await createBlog({ title, author, url })
+
+    if (newBlog) {
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    }
+  }
+
   return (
-    <div>
+    <form onSubmit={onCreate}>
       <h2>create new</h2>
       <div>
         <label htmlFor="input-title">title:</label>
@@ -10,7 +28,7 @@ const BlogForm = ({ onChange, onCreate, title, author, url }) => {
           id="input-title"
           name="title"
           value={title}
-          onChange={onChange}
+          onChange={e => setTitle(e.target.value)}
         />
       </div>
       <div>
@@ -21,7 +39,7 @@ const BlogForm = ({ onChange, onCreate, title, author, url }) => {
           id="input-author"
           name="author"
           value={author}
-          onChange={onChange}
+          onChange={e => setAuthor(e.target.value)}
         />
       </div>
       <div>
@@ -32,11 +50,11 @@ const BlogForm = ({ onChange, onCreate, title, author, url }) => {
           id="input-url"
           name="url"
           value={url}
-          onChange={onChange}
+          onChange={e => setUrl(e.target.value)}
         />
       </div>
-      <button onClick={onCreate}>create</button>
-    </div>
+      <button>create</button>
+    </form>
   )
 }
 
