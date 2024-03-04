@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -7,6 +7,7 @@ import Notification from './components/Notification'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Toggleable from './components/Toggleable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -17,6 +18,7 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
+  const blogFormRef = useRef(null)
 
   let timeoutId
 
@@ -104,6 +106,7 @@ const App = () => {
       setAuthor('')
       setUrl('')
 
+      blogFormRef.current.toggleVisibility()
       setErrorMessage({
         success: true,
         body: `a new blog ${newBlog.title} by ${newBlog.author} added`,
@@ -129,13 +132,15 @@ const App = () => {
         <button onClick={onLogout}>log out</button>
       </p>
 
-      <BlogForm
-        onChange={onChange}
-        onCreate={onCreate}
-        title={title}
-        author={author}
-        url={url}
-      />
+      <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
+        <BlogForm
+          onChange={onChange}
+          onCreate={onCreate}
+          title={title}
+          author={author}
+          url={url}
+        />
+      </Toggleable>
 
       {blogs.map(blog => (
         <Blog key={blog.id} blog={blog} />
