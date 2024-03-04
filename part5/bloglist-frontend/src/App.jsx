@@ -28,9 +28,15 @@ const App = () => {
   }
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      setBlogs(blogs)
-    })
+    blogService.getAll()
+      .then((blogs) => {
+        setBlogs(blogs)
+      })
+      .catch((error) => {
+        if (error.response.status === 500) {
+          console.log('cannot connect to the server')
+        }
+      })
   }, [])
 
   useEffect(() => {
