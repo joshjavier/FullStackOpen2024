@@ -1,4 +1,4 @@
-[role=alert]:empty {
+:is([role=alert], li):empty {
   display: none;
 }
 
