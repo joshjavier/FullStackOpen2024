@@ -4,21 +4,21 @@ const LoginForm = ({ onSubmit, username, password, onChange }) => {
   return (
     <form onSubmit={onSubmit}>
       <div>
-        <label htmlFor="input-username">username</label>{" "}
+        <label htmlFor="input-username">username</label>{' '}
         <input
           type="text"
-          id='input-username'
-          name='username'
+          id="input-username"
+          name="username"
           value={username}
           onChange={onChange}
         />
       </div>
       <div>
-        <label htmlFor="input-password">password</label>{" "}
+        <label htmlFor="input-password">password</label>{' '}
         <input
           type="password"
-          id='input-password'
-          name='password'
+          id="input-password"
+          name="password"
           value={password}
           onChange={onChange}
         />

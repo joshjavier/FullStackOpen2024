@@ -23,7 +23,7 @@ const App = () => {
     console.log('effect')
     noteService
       .getAll()
-      .then(initialNotes => {
+      .then((initialNotes) => {
         setNotes(initialNotes)
       })
   }, [])
@@ -44,15 +44,15 @@ const App = () => {
 
     noteService
       .update(id, changedNote)
-      .then(returnedNote => {
+      .then((returnedNote) => {
         setNotes(notes => notes.map(n => n.id !== id ? n : returnedNote))
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error)
         setErrorMessage(`Note '${note.content}' was already removed from the server`)
         setTimeout(() => {
           setErrorMessage(null)
-        }, 5000);
+        }, 5000)
         setNotes(notes => notes.filter(n => n.id !== id))
       })
   }
@@ -61,14 +61,14 @@ const App = () => {
     noteFormRef.current.toggleVisibility()
     noteService
       .create(noteObject)
-      .then(createdNote => {
+      .then((createdNote) => {
         setNotes(notes.concat(createdNote))
       })
-      .catch(error => {
+      .catch((error) => {
         setErrorMessage(error.response.data.error)
         setTimeout(() => {
           setErrorMessage(null)
-        }, 5000);
+        }, 5000)
       })
   }
 
@@ -91,7 +91,7 @@ const App = () => {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000);
+      }, 5000)
     }
   }
 
@@ -115,12 +115,12 @@ const App = () => {
         <div>
           <p>Hello {user.name}!</p>
 
-          <Toggleable buttonLabel='new note' ref={noteFormRef}>
+          <Toggleable buttonLabel="new note" ref={noteFormRef}>
             <NoteForm createNote={createNote} />
           </Toggleable>
         </div>
       ) : (
-        <Toggleable buttonLabel='login'>
+        <Toggleable buttonLabel="login">
           <LoginForm
             onSubmit={onLogin}
             username={username}
@@ -136,13 +136,13 @@ const App = () => {
         </button>
       </div>
       <ul>
-        {notesToShow.map(note =>
+        {notesToShow.map(note => (
           <Note
             key={note.id}
             note={note}
             toggleImportance={() => toggleImportanceOf(note.id)}
           />
-        )}
+        ))}
       </ul>
 
       <Footer />

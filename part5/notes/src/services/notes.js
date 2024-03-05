@@ -3,7 +3,7 @@ const baseURL = '/api/notes'
 
 let token
 
-const setToken = newToken => {
+const setToken = (newToken) => {
   token = newToken
 }
 
