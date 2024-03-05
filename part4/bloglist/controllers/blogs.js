@@ -59,7 +59,7 @@ blogsRouter.put('/:id', async (req, res, next) => {
       blog,
       { new: true, runValidators: true },
     )
-    res.json(updatedBlog)
+    res.json(await updatedBlog.populate('user', '-blogs'))
   } catch (error) {
     next(error)
   }
