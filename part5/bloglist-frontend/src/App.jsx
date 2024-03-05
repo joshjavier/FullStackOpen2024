@@ -121,6 +121,18 @@ const App = () => {
     }
   }
 
+  const removeBlog = async (id) => {
+    try {
+      const response = await blogService.remove(id)
+      if (response.status === 204) {
+        setBlogs(blogs.filter(blog => blog.id !== id))
+      }
+    } catch (error) {
+      setErrorMessage({ body: error.response.data.error })
+      clearAlert()
+    }
+  }
+
   return user ? (
     <div>
       <h2>blogs</h2>
@@ -140,7 +152,13 @@ const App = () => {
       </Toggleable>
 
       {blogs.map(blog => (
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          user={user}
+          likeBlog={likeBlog}
+          removeBlog={removeBlog}
+        />
       ))}
     </div>
   ) : (
