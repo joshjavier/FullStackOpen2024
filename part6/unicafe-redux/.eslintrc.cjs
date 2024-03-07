@@ -20,6 +20,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'react/prop-types': 'off',
     '@stylistic/indent': ['error', 2],
     '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
     '@stylistic/semi': ['error', 'never'],
