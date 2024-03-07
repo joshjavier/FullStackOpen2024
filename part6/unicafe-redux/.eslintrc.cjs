@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true, "jest/globals": true },
+  env: { browser: true, es2020: true, 'jest/globals': true },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -12,6 +12,7 @@ module.exports = {
   settings: { react: { version: '18.2' } },
   plugins: [
     'react-refresh',
+    '@stylistic',
     'jest',
   ],
   rules: {
@@ -19,5 +20,9 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    '@stylistic/indent': ['error', 2],
+    '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
+    '@stylistic/semi': ['error', 'never'],
+    '@stylistic/comma-dangle': ['error', 'always-multiline'],
   },
 }
