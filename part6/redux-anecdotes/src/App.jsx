@@ -11,7 +11,7 @@ const App = () => {
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {anecdotes.map(anecdote => (
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -21,7 +21,7 @@ const App = () => {
             <button onClick={() => vote(anecdote.id)}>vote</button>
           </div>
         </div>
-      )}
+      ))}
       <h2>create new</h2>
       <form>
         <div><input /></div>
