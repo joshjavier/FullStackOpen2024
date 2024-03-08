@@ -19,6 +19,7 @@
     "redux": "^4.2.1"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.6.3",
     "@vitejs/plugin-react": "^4.0.3",
     "eslint": "^8.45.0",
     "eslint-plugin-react": "^7.32.2",
