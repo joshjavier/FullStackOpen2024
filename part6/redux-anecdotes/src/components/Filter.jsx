@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux'
-import { filterAnecdotes } from '../reducers/filterReducer'
+import { filterChanged } from '../reducers/filterReducer'
 
 const Filter = () => {
   const dispatch = useDispatch()
@@ -8,7 +8,7 @@ const Filter = () => {
 
   const onChange = (evt) => {
     const query = evt.target.value
-    dispatch(filterAnecdotes(query))
+    dispatch(filterChanged(query))
   }
 
   return (
