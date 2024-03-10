@@ -18,6 +18,13 @@ const AnecdoteForm = () => {
       timeoutID.current = setTimeout(() => {
         dispatch(clearNotification())
       }, 5000);
+    },
+    onError: (error) => {
+      clearTimeout(timeoutID.current)
+      dispatch(setNotification(error.response.data.error))
+      timeoutID.current = setTimeout(() => {
+        dispatch(clearNotification())
+      }, 5000);
     }
   })
 
