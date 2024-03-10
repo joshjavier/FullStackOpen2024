@@ -9,3 +9,7 @@ export const getNotes = () => {
 export const createNote = (newNote) => {
   return axios.post(baseURL, newNote).then(res => res.data)
 }
+
+export const updateNote = (updatedNote) => {
+  return axios.put(`${baseURL}/${updatedNote.id}`, updatedNote).then(res => res.data)
+}
