@@ -3,15 +3,19 @@ import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
+  let blog, likeBlog
+
   beforeEach(() => {
-    const blog = {
+    blog = {
       title: 'The Best Essay',
       author: 'Paul Graham',
       url: 'https://paulgraham.com/best.html',
       likes: 74,
     }
 
-    render(<Blog blog={blog} />)
+    likeBlog = vi.fn()
+
+    render(<Blog blog={blog} likeBlog={likeBlog} />)
   })
 
   test('renders the blog title and author, but not URL and number of likes', () => {
@@ -27,5 +31,16 @@ describe('<Blog />', () => {
 
     expect(screen.getByText('https://paulgraham.com/best.html')).toBeVisible()
     expect(screen.getByText('likes 74')).toBeVisible()
+  })
+
+  test('if like button is clicked twice, the event handler is called twice', async () => {
+    const user = userEvent.setup()
+    await user.click(screen.getByText('show'))
+
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    expect(likeBlog.mock.calls).toHaveLength(2)
   })
 })
