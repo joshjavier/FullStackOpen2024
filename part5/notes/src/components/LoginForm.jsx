@@ -23,7 +23,7 @@ const LoginForm = ({ onSubmit, username, password, onChange }) => {
           onChange={onChange}
         />
       </div>
-      <button>login</button>
+      <button id='button-login'>login</button>
     </form>
   )
 }
