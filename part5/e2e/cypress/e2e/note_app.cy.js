@@ -28,6 +28,21 @@ describe('Note app', () => {
     cy.contains('Hello Matti Luukkainen!')
   })
 
+  it('login fails with wrong password', function() {
+    cy.contains('login').click()
+    cy.get('#input-username').type('mluukkai')
+    cy.get('#input-password').type('wrong')
+    cy.get('#button-login').click()
+
+    cy.get('.error')
+      .should('contain', 'Wrong credentials')
+      .and('have.css', 'color', 'rgb(255, 0, 0)')
+      .and('have.css', 'border-style', 'solid')
+
+    cy.get('html').should('not.contain', 'Hello Matti Luukkainen!')
+    // cy.contains('Hello Matti Luukkainen!').should('not.exist')
+  })
+
   describe('when logged in', function() {
     beforeEach(function() {
       cy.contains('login').click()
