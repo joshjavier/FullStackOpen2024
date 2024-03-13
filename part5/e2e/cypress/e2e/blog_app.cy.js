@@ -93,6 +93,20 @@ describe('Blog app', function() {
         cy.get('button').contains('remove').click()
         cy.contains('40 years of programming Lars Wirzenius').should('not.exist')
       })
+
+      it('only the user who created a blog can see its delete button', function() {
+        // Create a new user and log in with it
+        cy.addUser({
+          name: 'Blogless User',
+          username: 'bloglessuser',
+          password: 'sharpasatack'
+        })
+        cy.login({ username: 'bloglessuser', password: 'sharpasatack' })
+        cy.visit('')
+
+        cy.get('button').contains('show').click()
+        cy.get('button').contains('remove').should('not.exist')
+      })
     })
   })
 })
