@@ -4,7 +4,7 @@ describe('Blog app', function() {
     cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
 
     // Create a new user
-    cy.request('POST', `${Cypress.env('BACKEND')}/users`, {
+    cy.addUser({
       name: "Josh Javier",
       username: "joshjavier",
       password: "mabuhay"

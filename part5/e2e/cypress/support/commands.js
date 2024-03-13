@@ -40,3 +40,9 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
     auth: { bearer: JSON.parse(localStorage.getItem('bloglistUser')).token }
   })
 })
+
+Cypress.Commands.add('addUser', ({ name, username, password }) => {
+  cy.request('POST', `${Cypress.env('BACKEND')}/users`, {
+    name, username, password
+  })
+})
