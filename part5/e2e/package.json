@@ -1,0 +1,16 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "test:e2e": "cypress run"
+  },
+  "keywords": [],
+  "author": "Josh Javier",
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "^13.6.6"
+  }
+}
