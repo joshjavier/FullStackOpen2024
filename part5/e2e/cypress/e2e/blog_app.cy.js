@@ -57,5 +57,36 @@ describe('Blog app', function() {
         .should('contain', 'a new blog Simplicity of IRC by Susam Pal added')
         .should('have.css', 'color', 'rgb(0, 128, 0)')
     })
+
+    describe('and several blogs exist', function() {
+      beforeEach(function() {
+        // Create sample blogs
+        cy.createBlog({
+          title: '40 Years of programming',
+          author: 'Lars Wirzenius',
+          url: 'https://liw.fi/40/'
+        })
+
+        cy.createBlog({
+          title: 'Detect Caps Lock with JavaScript',
+          author: 'David Walsh',
+          url: 'https://davidwalsh.name/detect-caps-lock'
+        })
+
+        cy.createBlog({
+          title: 'Breaking Down Tasks',
+          author: 'Jacob Kaplan-Moss',
+          url: 'https://jacobian.org/2024/mar/11/breaking-down-tasks/'
+        })
+
+        cy.visit('')
+      })
+
+      it('A blog can be liked', function() {
+        cy.get('button').contains('show').click()
+        cy.get('button').contains('like').click()
+        cy.contains('likes 1')
+      })
+    })
   })
 })

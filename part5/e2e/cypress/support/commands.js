@@ -31,3 +31,12 @@ Cypress.Commands.add('login', ({ username, password }) => {
     cy.visit('')
   })
 })
+
+Cypress.Commands.add('createBlog', ({ title, author, url }) => {
+  cy.request({
+    method: 'POST',
+    url: `${Cypress.env('BACKEND')}/blogs`,
+    body: { title, author, url },
+    auth: { bearer: JSON.parse(localStorage.getItem('bloglistUser')).token }
+  })
+})
