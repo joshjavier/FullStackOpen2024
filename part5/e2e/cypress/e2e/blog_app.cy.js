@@ -58,11 +58,11 @@ describe('Blog app', function() {
         .should('have.css', 'color', 'rgb(0, 128, 0)')
     })
 
-    describe('and several blogs exist', function() {
+    describe('Several blogs exist', function() {
       beforeEach(function() {
         // Create sample blogs
         cy.createBlog({
-          title: '40 Years of programming',
+          title: '40 years of programming',
           author: 'Lars Wirzenius',
           url: 'https://liw.fi/40/'
         })
@@ -82,10 +82,16 @@ describe('Blog app', function() {
         cy.visit('')
       })
 
-      it('A blog can be liked', function() {
+      it('a blog can be liked', function() {
         cy.get('button').contains('show').click()
         cy.get('button').contains('like').click()
         cy.contains('likes 1')
+      })
+
+      it('the user who created a blog can delete it', function() {
+        cy.get('button').contains('show').click()
+        cy.get('button').contains('remove').click()
+        cy.contains('40 years of programming Lars Wirzenius').should('not.exist')
       })
     })
   })
