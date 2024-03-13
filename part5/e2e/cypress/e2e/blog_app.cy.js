@@ -107,6 +107,33 @@ describe('Blog app', function() {
         cy.get('button').contains('show').click()
         cy.get('button').contains('remove').should('not.exist')
       })
+
+      it('blogs are ordered by likes in descending order', function() {
+        cy.get('.blog').eq(0).as('firstBlog')
+        cy.get('.blog').eq(1).as('secondBlog')
+        cy.get('.blog').eq(2).as('thirdBlog')
+
+        cy.get('@secondBlog').contains('show').click()
+        cy.get('@secondBlog').contains('likes 0').find('button').click()
+        cy.get('@secondBlog').contains('likes 1').find('button').click()
+        cy.get('@secondBlog').contains('likes 2').find('button').click()
+        cy.get('@secondBlog').contains('likes 3')
+
+        cy.get('@thirdBlog').contains('show').click()
+        cy.get('@thirdBlog').contains('likes 0').find('button').click()
+        cy.get('@thirdBlog').contains('likes 1').find('button').click()
+        cy.get('@thirdBlog').contains('likes 2')
+
+        cy.get('@firstBlog').contains('show').click()
+        cy.get('@firstBlog').contains('likes 0').find('button').click()
+        cy.get('@firstBlog').contains('likes 1')
+
+        cy.visit('')
+
+        cy.get('.blog').eq(0).should('contain', 'Detect Caps Lock with JavaScript')
+        cy.get('.blog').eq(1).should('contain', 'Breaking Down Tasks')
+        cy.get('.blog').eq(2).should('contain', '40 years of programming')
+      })
     })
   })
 })
