@@ -42,13 +42,7 @@ describe('Blog app', function() {
   describe('When logged in', function() {
     beforeEach(function() {
       // Log in and save auth token in local storage
-      cy.request('POST', `${Cypress.env('BACKEND')}/login`, {
-        username: 'joshjavier',
-        password: 'mabuhay'
-      }).then(response => {
-        localStorage.setItem('bloglistUser', JSON.stringify(response.body))
-        cy.visit('')
-      })
+      cy.login({ username: 'joshjavier', password: 'mabuhay' })
     })
 
     it('A blog can be created', function() {
