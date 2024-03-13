@@ -7,6 +7,7 @@
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon --env-file=.env.local index.js",
     "test": "NODE_ENV=test node --env-file=.env.local --test",
+    "start:test": "NODE_ENV=test node --env-file=.env.local index.js",
     "lint": "eslint ."
   },
   "keywords": [],
