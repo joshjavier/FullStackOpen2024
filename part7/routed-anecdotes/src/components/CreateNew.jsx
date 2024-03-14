@@ -1,10 +1,10 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useField } from '../hooks'
 
 const CreateNew = ({ addNew }) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const content = useField('text')
+  const author = useField('text')
+  const info = useField('text')
   const navigate = useNavigate()
 
   const onSubmit = (e) => {
@@ -24,15 +24,15 @@ const CreateNew = ({ addNew }) => {
       <form onSubmit={onSubmit}>
         <div>
           <label htmlFor="content-input">content</label>
-          <input id="content-input" name="content" value={content} onChange={(e) => setContent(e.target.value)} />
+          <input id="content-input" name="content" {...content} />
         </div>
         <div>
           <label htmlFor="author-input">author</label>
-          <input id="author-input" name="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input id="author-input" name="author" {...author} />
         </div>
         <div>
           <label htmlFor="url-input">url for more info</label>
-          <input id="url-input" name="info" value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input id="url-input" name="info" {...info} />
         </div>
         <button>create</button>
       </form>
