@@ -24,5 +24,6 @@ module.exports = {
     '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
     '@stylistic/semi': ['error', 'never'],
     '@stylistic/comma-dangle': ['error', 'always-multiline'],
+    '@stylistic/jsx-quotes': ['error', 'prefer-double'],
   },
 }
