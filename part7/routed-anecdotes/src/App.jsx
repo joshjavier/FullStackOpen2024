@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const Menu = () => {
   const padding = {
-    paddingRight: 5
+    paddingRight: 5,
   }
   return (
     <div>
@@ -30,7 +30,7 @@ const About = () => (
     <em>An anecdote is a brief, revealing account of an individual person or an incident.
       Occasionally humorous, anecdotes differ from jokes because their primary purpose is not simply to provoke laughter but to reveal a truth more general than the brief tale itself,
       such as to characterize a person by delineating a specific quirk or trait, to communicate an abstract idea about a person, place, or thing through the concrete details of a short narrative.
-      An anecdote is "a story with a point."</em>
+      An anecdote is &ldquo;a story with a point.&rdquo;</em>
 
     <p>Software engineering is full of excellent anecdotes, at this app you can find the best and add more.</p>
   </div>
@@ -56,7 +56,7 @@ const CreateNew = (props) => {
       content,
       author,
       info,
-      votes: 0
+      votes: 0,
     })
   }
 
@@ -90,15 +90,15 @@ const App = () => {
       author: 'Jez Humble',
       info: 'https://martinfowler.com/bliki/FrequencyReducesDifficulty.html',
       votes: 0,
-      id: 1
+      id: 1,
     },
     {
       content: 'Premature optimization is the root of all evil',
       author: 'Donald Knuth',
       info: 'http://wiki.c2.com/?PrematureOptimization',
       votes: 0,
-      id: 2
-    }
+      id: 2,
+    },
   ])
 
   const [notification, setNotification] = useState('')
@@ -116,7 +116,7 @@ const App = () => {
 
     const voted = {
       ...anecdote,
-      votes: anecdote.votes + 1
+      votes: anecdote.votes + 1,
     }
 
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
