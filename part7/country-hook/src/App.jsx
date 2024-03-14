@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import axios from 'axios'
 import { useCountry, useField } from "./hooks";
 import Country from './components/Country';
 
@@ -8,14 +7,14 @@ const App = () => {
   const [name, setName] = useState('')
   const country = useCountry(name)
 
-  const fetch = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault()
     setName(nameInput.value)
   }
 
   return (
     <div>
-      <form onSubmit={fetch}>
+      <form onSubmit={onSubmit}>
         <input {...nameInput} />
         <button>find</button>
       </form>
