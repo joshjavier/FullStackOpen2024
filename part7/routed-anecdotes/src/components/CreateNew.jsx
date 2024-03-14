@@ -1,36 +1,38 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const CreateNew = (props) => {
+const CreateNew = ({ addNew }) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
+  const navigate = useNavigate()
 
-
-  const handleSubmit = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault()
-    props.addNew({
+    addNew({
       content,
       author,
       info,
       votes: 0,
     })
+    navigate('/')
   }
 
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <div>
-          content
-          <input name="content" value={content} onChange={(e) => setContent(e.target.value)} />
+          <label htmlFor="content-input">content</label>
+          <input id="content-input" name="content" value={content} onChange={(e) => setContent(e.target.value)} />
         </div>
         <div>
-          author
-          <input name="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <label htmlFor="author-input">author</label>
+          <input id="author-input" name="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
         </div>
         <div>
-          url for more info
-          <input name="info" value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <label htmlFor="url-input">url for more info</label>
+          <input id="url-input" name="info" value={info} onChange={(e)=> setInfo(e.target.value)} />
         </div>
         <button>create</button>
       </form>
