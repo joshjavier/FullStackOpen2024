@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 import PropTypes from 'prop-types'
-import storage from "../services/storage"
+import storage from '../services/storage'
 
 const Blog = ({ blog, handleVote, handleDelete }) => {
   const [visible, setVisible] = useState(false)
@@ -26,7 +26,9 @@ const Blog = ({ blog, handleVote, handleDelete }) => {
       </button>
       {visible && (
         <div>
-          <div><a href={blog.url}>{blog.url}</a></div>
+          <div>
+            <a href={blog.url}>{blog.url}</a>
+          </div>
           <div>
             likes {blog.likes}
             <button style={{ marginLeft: 3 }} onClick={() => handleVote(blog)}>
@@ -34,7 +36,9 @@ const Blog = ({ blog, handleVote, handleDelete }) => {
             </button>
           </div>
           <div>{nameOfUser}</div>
-          {canRemove && <button onClick={() => handleDelete(blog)}>remove</button>}
+          {canRemove && (
+            <button onClick={() => handleDelete(blog)}>remove</button>
+          )}
         </div>
       )}
     </div>

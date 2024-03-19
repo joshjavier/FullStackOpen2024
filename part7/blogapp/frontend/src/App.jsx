@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from 'react'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -19,7 +19,7 @@ const App = () => {
   const byLikes = (a, b) => b.likes - a.likes
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs))
+    blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const App = () => {
     clearTimeout(timeoutRef.current)
     timeoutRef.current = setTimeout(() => {
       setNotification(null)
-    }, 5000);
+    }, 5000)
   }
 
   const handleLogin = async (credentials) => {
@@ -63,7 +63,7 @@ const App = () => {
     })
 
     notify(`You liked ${updatedBlog.title} by ${updatedBlog.author}`)
-    setBlogs(blogs.map(b => b.id === blog.id ? updatedBlog : b))
+    setBlogs(blogs.map((b) => (b.id === blog.id ? updatedBlog : b)))
   }
 
   const handleLogout = () => {
@@ -75,7 +75,7 @@ const App = () => {
   const handleDelete = async (blog) => {
     if (confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       await blogService.remove(blog.id)
-      setBlogs(blogs.filter(b => b.id !== blog.id))
+      setBlogs(blogs.filter((b) => b.id !== blog.id))
       notify(`Blog ${blog.title} by ${blog.author} removed`)
     }
   }
@@ -101,7 +101,7 @@ const App = () => {
       <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
         <NewBlog create={handleCreate} />
       </Toggleable>
-      {blogs.sort(byLikes).map(blog => (
+      {blogs.sort(byLikes).map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}

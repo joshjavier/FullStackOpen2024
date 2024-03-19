@@ -1,9 +1,9 @@
-import { useState } from "react"
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const NewBlog = ({ create }) => {
   const [title, setTitle] = useState('')
-  const [url ,setUrl] = useState('')
+  const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
 
   const onTitleChange = (e) => setTitle(e.target.value)

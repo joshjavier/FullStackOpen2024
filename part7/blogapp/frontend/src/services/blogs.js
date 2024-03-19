@@ -4,7 +4,7 @@ import storage from './storage'
 const baseUrl = '/api/blogs'
 
 const getConfig = () => ({
-  headers: { Authorization: `Bearer ${storage.loadUser().token}` }
+  headers: { Authorization: `Bearer ${storage.loadUser().token}` },
 })
 
 const getAll = async () => {

@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useState } from "react"
+import { forwardRef, useImperativeHandle, useState } from 'react'
 import PropTypes from 'prop-types'
 
 const Toggleable = forwardRef(({ children, buttonLabel }, ref) => {

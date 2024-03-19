@@ -16,11 +16,7 @@ const Notification = ({ notification }) => {
     borderRadius: 5,
   }
 
-  return (
-    <div style={style}>
-      {message}
-    </div>
-  )
+  return <div style={style}>{message}</div>
 }
 
 Notification.propTypes = {
