@@ -1,4 +1,4 @@
-const KEY = 'blogUserKey'
+const KEY = 'blogappUser'
 
 const saveUser = (user) => {
   localStorage.setItem(KEY, JSON.stringify(user))

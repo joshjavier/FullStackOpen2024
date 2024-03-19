@@ -83,7 +83,7 @@ const App = () => {
   if (!user) {
     return (
       <div>
-        <h2>blogs</h2>
+        <h2>log in to application</h2>
         <Notification notification={notification} />
         <Login login={handleLogin} />
       </div>
