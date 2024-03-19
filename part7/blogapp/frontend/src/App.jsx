@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { notify } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogsReducer'
+import {
+  initializeBlogs,
+  createBlog,
+  likeBlog,
+  deleteBlog,
+} from './reducers/blogsReducer'
 
-import blogService from './services/blogs'
 import loginService from './services/login'
 import storage from './services/storage'
 import Blog from './components/Blog'
@@ -50,13 +54,8 @@ const App = () => {
 
   const handleVote = async (blog) => {
     console.log('updating', blog)
-    const updatedBlog = await blogService.update(blog.id, {
-      ...blog,
-      likes: blog.likes + 1,
-    })
-
-    dispatch(notify(`You liked ${updatedBlog.title} by ${updatedBlog.author}`))
-    setBlogs(blogs.map((b) => (b.id === blog.id ? updatedBlog : b)))
+    dispatch(likeBlog(blog))
+    dispatch(notify(`You liked ${blog.title} by ${blog.author}`))
   }
 
   const handleLogout = () => {
@@ -67,8 +66,7 @@ const App = () => {
 
   const handleDelete = async (blog) => {
     if (confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      await blogService.remove(blog.id)
-      setBlogs(blogs.filter((b) => b.id !== blog.id))
+      dispatch(deleteBlog(blog.id))
       dispatch(notify(`Blog ${blog.title} by ${blog.author} removed`))
     }
   }
