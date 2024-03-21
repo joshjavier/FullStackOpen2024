@@ -6,6 +6,7 @@ import { initializeUsers } from './reducers/usersReducer'
 import { checkLoggedInUser, login, logout } from './reducers/userReducer'
 import { Route, Routes } from 'react-router-dom'
 
+import Blog from './components/Blog'
 import BlogList from './components/BlogList'
 import Login from './components/Login'
 import NewBlog from './components/NewBlog'
@@ -77,6 +78,7 @@ const App = () => {
 
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/blogs/:id" element={<Blog />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User />} />
       </Routes>
