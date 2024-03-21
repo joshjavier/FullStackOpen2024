@@ -8,12 +8,14 @@ import {
   deleteBlog,
 } from './reducers/blogsReducer'
 import { checkLoggedInUser, login, logout } from './reducers/userReducer'
+import { Route, Routes } from 'react-router-dom'
 
 import Blog from './components/Blog'
 import Login from './components/Login'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import Toggleable from './components/Toggleable'
+import Users from './components/Users'
 
 const App = () => {
   const blogs = useSelector((state) => state.blogs)
@@ -71,6 +73,24 @@ const App = () => {
     )
   }
 
+  const BlogList = () => {
+    return (
+      <div>
+        <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
+          <NewBlog create={handleCreate} />
+        </Toggleable>
+        {blogs.toSorted(byLikes).map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleVote={handleVote}
+            handleDelete={handleDelete}
+          />
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2>blogs</h2>
@@ -79,17 +99,11 @@ const App = () => {
         {user.name} logged in
         <button onClick={handleLogout}>log out</button>
       </div>
-      <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
-        <NewBlog create={handleCreate} />
-      </Toggleable>
-      {blogs.toSorted(byLikes).map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleVote={handleVote}
-          handleDelete={handleDelete}
-        />
-      ))}
+
+      <Routes>
+        <Route path="/" element={<BlogList />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
     </div>
   )
 }
