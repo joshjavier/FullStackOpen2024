@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
-import userService from '../services/users'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { initializeUsers } from '../reducers/usersReducer'
 
 const Users = () => {
-  const [users, setUsers] = useState([])
+  const users = useSelector((state) => state.users)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    userService.getAll().then((users) => {
-      setUsers(users)
-    })
-  }, [])
+    dispatch(initializeUsers())
+  }, [dispatch])
 
   return (
     <div>
