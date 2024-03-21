@@ -1,17 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { notify } from './reducers/notificationReducer'
-import {
-  initializeBlogs,
-  createBlog,
-  likeBlog,
-  deleteBlog,
-} from './reducers/blogsReducer'
+import { initializeBlogs, createBlog } from './reducers/blogsReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { checkLoggedInUser, login, logout } from './reducers/userReducer'
 import { Route, Routes } from 'react-router-dom'
 
-import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import Login from './components/Login'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
@@ -20,12 +15,9 @@ import Users from './components/Users'
 import User from './components/User'
 
 const App = () => {
-  const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
   const blogFormRef = useRef()
   const dispatch = useDispatch()
-
-  const byLikes = (a, b) => b.likes - a.likes
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -48,22 +40,9 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
   }
 
-  const handleVote = async (blog) => {
-    console.log('updating', blog)
-    dispatch(likeBlog(blog))
-    dispatch(notify(`You liked ${blog.title} by ${blog.author}`))
-  }
-
   const handleLogout = () => {
     dispatch(logout())
     dispatch(notify(`Bye, ${user.name}`))
-  }
-
-  const handleDelete = async (blog) => {
-    if (confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      dispatch(deleteBlog(blog.id))
-      dispatch(notify(`Blog ${blog.title} by ${blog.author} removed`))
-    }
   }
 
   if (!user) {
@@ -76,20 +55,13 @@ const App = () => {
     )
   }
 
-  const BlogList = () => {
+  const Main = () => {
     return (
       <div>
         <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
           <NewBlog create={handleCreate} />
         </Toggleable>
-        {blogs.toSorted(byLikes).map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleVote={handleVote}
-            handleDelete={handleDelete}
-          />
-        ))}
+        <BlogList />
       </div>
     )
   }
@@ -104,7 +76,7 @@ const App = () => {
       </div>
 
       <Routes>
-        <Route path="/" element={<BlogList />} />
+        <Route path="/" element={<Main />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User />} />
       </Routes>
