@@ -7,6 +7,7 @@ import {
   likeBlog,
   deleteBlog,
 } from './reducers/blogsReducer'
+import { initializeUsers } from './reducers/usersReducer'
 import { checkLoggedInUser, login, logout } from './reducers/userReducer'
 import { Route, Routes } from 'react-router-dom'
 
@@ -16,6 +17,7 @@ import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import Toggleable from './components/Toggleable'
 import Users from './components/Users'
+import User from './components/User'
 
 const App = () => {
   const blogs = useSelector((state) => state.blogs)
@@ -27,6 +29,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUsers())
     dispatch(checkLoggedInUser())
   }, [dispatch])
 
@@ -103,6 +106,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<BlogList />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<User />} />
       </Routes>
     </div>
   )
