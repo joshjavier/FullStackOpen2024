@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { notify } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog } from './reducers/blogsReducer'
 import { initializeUsers } from './reducers/usersReducer'
-import { checkLoggedInUser, login, logout } from './reducers/userReducer'
+import { checkLoggedInUser, login } from './reducers/userReducer'
 import { Route, Routes } from 'react-router-dom'
 
 import Blog from './components/Blog'
 import BlogList from './components/BlogList'
+import Header from './components/Header'
 import Login from './components/Login'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
@@ -41,11 +42,6 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
   }
 
-  const handleLogout = () => {
-    dispatch(logout())
-    dispatch(notify(`Bye, ${user.name}`))
-  }
-
   if (!user) {
     return (
       <div>
@@ -69,12 +65,9 @@ const App = () => {
 
   return (
     <div>
+      <Header />
       <h2>blogs</h2>
       <Notification />
-      <div>
-        {user.name} logged in
-        <button onClick={handleLogout}>log out</button>
-      </div>
 
       <Routes>
         <Route path="/" element={<Main />} />
