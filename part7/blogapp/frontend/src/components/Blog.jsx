@@ -39,10 +39,14 @@ const Blog = () => {
     dispatch(notify(`You liked ${blog.title} by ${blog.author}`))
   }
 
-  const onAddComment = (evt) => {
-    evt.preventDefault()
-    dispatch(addComment(blog.id, evt.target.comment.value))
-    evt.target.reset()
+  const onAddComment = async (evt) => {
+    try {
+      evt.preventDefault()
+      await dispatch(addComment(blog.id, evt.target.comment.value))
+      evt.target.reset()
+    } catch (error) {
+      dispatch(notify('Cannot add empty comment', 'danger'))
+    }
   }
 
   return (
