@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { notify } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog } from './reducers/blogsReducer'
 import { initializeUsers } from './reducers/usersReducer'
-import { checkLoggedInUser, login } from './reducers/userReducer'
+import { checkLoggedInUser } from './reducers/userReducer'
 import { Route, Routes } from 'react-router-dom'
 
 import Blog from './components/Blog'
@@ -27,15 +27,6 @@ const App = () => {
     dispatch(checkLoggedInUser())
   }, [dispatch])
 
-  const handleLogin = async (credentials) => {
-    try {
-      const user = await dispatch(login(credentials))
-      dispatch(notify(`Welcome back, ${user.name}`))
-    } catch (error) {
-      dispatch(notify('Wrong credentials', 'error'))
-    }
-  }
-
   const handleCreate = async (blog) => {
     dispatch(createBlog(blog))
     dispatch(notify(`Blog created: ${blog.title} by ${blog.author}`))
@@ -47,7 +38,7 @@ const App = () => {
       <div>
         <h2>log in to application</h2>
         <Notification />
-        <Login login={handleLogin} />
+        <Login />
       </div>
     )
   }
