@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { addComment, deleteBlog, likeBlog } from '../reducers/blogsReducer'
 import { notify } from '../reducers/notificationReducer'
 import storage from '../services/storage'
 
 const Blog = () => {
+  const navigate = useNavigate()
   const { id } = useParams()
   const blog = useSelector((state) => {
     return state.blogs.find((blog) => blog.id === id)
@@ -23,6 +24,7 @@ const Blog = () => {
     if (confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       dispatch(deleteBlog(blog.id))
       dispatch(notify(`Blog ${blog.title} by ${blog.author} removed`))
+      navigate('/')
     }
   }
 
