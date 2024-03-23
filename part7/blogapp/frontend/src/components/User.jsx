@@ -1,11 +1,9 @@
-import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import { useMatch } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 const User = () => {
-  const users = useSelector((state) => state.users)
-  const match = useMatch('/users/:id')
-  const user = match ? users.find((user) => user.id === match.params.id) : null
+  const { id } = useParams()
+  const user = useSelector(({ users }) => users.find((user) => user.id === id))
 
   if (!user) return
 
@@ -15,20 +13,13 @@ const User = () => {
       <h3>added blogs</h3>
       <ul>
         {user.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+          <li key={blog.id}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </li>
         ))}
       </ul>
     </div>
   )
-}
-
-User.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    name: PropTypes.string,
-    blogs: PropTypes.array.isRequired,
-    id: PropTypes.string.isRequired,
-  }),
 }
 
 export default User
