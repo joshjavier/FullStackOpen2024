@@ -10,7 +10,7 @@ const Users = () => {
   return (
     <div>
       <h2>Users</h2>
-      <Table striped bordered hover>
+      <Table striped bordered>
         <thead>
           <tr>
             <th>user</th>
