@@ -4,26 +4,27 @@ import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogsReducer'
 import { notify } from '../reducers/notificationReducer'
 
+const EMPTY = { title: '', url: '', author: '' }
+
 const NewBlog = (props) => {
   const dispatch = useDispatch()
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
-  const [author, setAuthor] = useState('')
+  const [blog, setBlog] = useState(EMPTY)
 
-  const onTitleChange = (e) => setTitle(e.target.value)
-  const onUrlChange = (e) => setUrl(e.target.value)
-  const onAuthorChange = (e) => setAuthor(e.target.value)
+  const onChange = (evt) => {
+    setBlog((value) => ({
+      ...value,
+      [evt.target.name]: evt.target.value,
+    }))
+  }
 
   const onSubmit = async (evt) => {
     evt.preventDefault()
-    const blog = { title, url, author }
+    console.log(blog)
 
     try {
       dispatch(createBlog(blog))
       dispatch(notify(`Blog created: ${blog.title} by ${blog.author}`))
-      setAuthor('')
-      setTitle('')
-      setUrl('')
+      setBlog(EMPTY)
 
       if (props.toggle) {
         props.toggle()
@@ -41,30 +42,33 @@ const NewBlog = (props) => {
           <label htmlFor="title">Title:</label>
           <input
             type="text"
+            name="title"
             id="title"
             data-testid="title"
-            value={title}
-            onChange={onTitleChange}
+            value={blog.title}
+            onChange={onChange}
           />
         </div>
         <div>
           <label htmlFor="url">URL:</label>
           <input
             type="text"
+            name="url"
             id="url"
             data-testid="url"
-            value={url}
-            onChange={onUrlChange}
+            value={blog.url}
+            onChange={onChange}
           />
         </div>
         <div>
           <label htmlFor="author">Author:</label>
           <input
             type="text"
+            name="author"
             id="author"
             data-testid="author"
-            value={author}
-            onChange={onAuthorChange}
+            value={blog.author}
+            onChange={onChange}
           />
         </div>
         <button>Create</button>
