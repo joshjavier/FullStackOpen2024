@@ -3,6 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { addComment, deleteBlog, likeBlog } from '../reducers/blogsReducer'
 import { notify } from '../reducers/notificationReducer'
 import storage from '../services/storage'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 const Blog = () => {
   const navigate = useNavigate()
@@ -41,32 +46,52 @@ const Blog = () => {
   }
 
   return (
-    <div>
-      <h2>
-        {blog.title} by {blog.author}
-      </h2>
-      <div>
-        <div>
-          <a href={blog.url}>{blog.url}</a>
-        </div>
-        <div>
-          likes {blog.likes}
-          <button style={{ marginLeft: 3 }} onClick={() => handleVote(blog)}>
-            like
-          </button>
-        </div>
-        <div>added by {nameOfUser}</div>
+    <div className="my-3">
+      <Card>
+        <Card.Body>
+          <Card.Title>
+            {blog.title} by {blog.author}
+          </Card.Title>
+        </Card.Body>
+        <ListGroup variant="flush">
+          <ListGroup.Item>
+            <a href={blog.url} target="_blank">
+              {blog.url}
+            </a>
+          </ListGroup.Item>
+          <ListGroup.Item className="d-flex gap-2 align-items-center">
+            likes {blog.likes}
+            <Button onClick={() => handleVote(blog)}>like</Button>
+          </ListGroup.Item>
+          <ListGroup.Item>added by {nameOfUser}</ListGroup.Item>
+        </ListGroup>
         {canRemove && (
-          <button onClick={() => handleDelete(blog)}>remove</button>
+          <Card.Footer className="d-flex justify-content-center">
+            <Button
+              variant="danger"
+              onClick={() => handleDelete(blog)}
+              className="text-center"
+            >
+              remove
+            </Button>
+          </Card.Footer>
         )}
-      </div>
+      </Card>
 
-      <div>
+      <div className="mt-5">
         <h3>comments</h3>
-        <form onSubmit={onAddComment}>
-          <input type="text" name="comment" />
-          <button>add comment</button>
-        </form>
+        <Form
+          onSubmit={onAddComment}
+          className="mb-3"
+          style={{ maxWidth: 400 }}
+        >
+          <InputGroup>
+            <Form.Control type="text" name="comment" />
+            <Button variant="dark" type="submit">
+              add comment
+            </Button>
+          </InputGroup>
+        </Form>
         {blog.comments.length > 0 && (
           <ul>
             {blog.comments.map((comment) => (
