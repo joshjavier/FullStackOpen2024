@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogsReducer'
 import { initializeUsers } from './reducers/usersReducer'
@@ -6,12 +6,10 @@ import { checkLoggedInUser } from './reducers/userReducer'
 import { Route, Routes } from 'react-router-dom'
 
 import Blog from './components/Blog'
-import BlogList from './components/BlogList'
 import Header from './components/Header'
 import Login from './components/Login'
-import NewBlog from './components/NewBlog'
+import Main from './components/Main'
 import Notification from './components/Notification'
-import Toggleable from './components/Toggleable'
 import Users from './components/Users'
 import User from './components/User'
 
@@ -19,7 +17,6 @@ import Container from 'react-bootstrap/Container'
 
 const App = () => {
   const user = useSelector((state) => state.user)
-  const blogFormRef = useRef()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -35,17 +32,6 @@ const App = () => {
         <Notification />
         <Login />
       </Container>
-    )
-  }
-
-  const Main = () => {
-    return (
-      <div>
-        <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
-          <NewBlog toggle={() => blogFormRef.current.toggleVisibility()} />
-        </Toggleable>
-        <BlogList />
-      </div>
     )
   }
 

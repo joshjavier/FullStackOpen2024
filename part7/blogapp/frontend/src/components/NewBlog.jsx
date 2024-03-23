@@ -26,8 +26,8 @@ const NewBlog = (props) => {
       dispatch(notify(`Blog created: ${blog.title} by ${blog.author}`))
       setBlog(EMPTY)
 
-      if (props.toggle) {
-        props.toggle()
+      if (props.toggleVisibility) {
+        props.toggleVisibility()
       }
     } catch (error) {
       dispatch(notify(error.response.data.error))
@@ -78,7 +78,7 @@ const NewBlog = (props) => {
 }
 
 NewBlog.propTypes = {
-  toggle: PropTypes.func,
+  toggleVisibility: PropTypes.func,
 }
 
 export default NewBlog
