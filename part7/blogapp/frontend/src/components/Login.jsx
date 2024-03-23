@@ -21,7 +21,7 @@ const Login = () => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      dispatch(notify('Wrong credentials', 'error'))
+      dispatch(notify('Wrong credentials', 'danger'))
       setPassword('')
     }
   }
