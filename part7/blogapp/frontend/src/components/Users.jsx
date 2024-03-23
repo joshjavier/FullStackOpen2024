@@ -1,13 +1,16 @@
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Table from 'react-bootstrap/Table'
 
 const Users = () => {
   const users = useSelector((state) => state.users)
 
+  if (!users) return
+
   return (
     <div>
       <h2>Users</h2>
-      <table>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>user</th>
@@ -26,7 +29,7 @@ const Users = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   )
 }
