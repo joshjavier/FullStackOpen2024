@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { notify } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogsReducer'
+import { initializeBlogs } from './reducers/blogsReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { checkLoggedInUser } from './reducers/userReducer'
 import { Route, Routes } from 'react-router-dom'
@@ -29,12 +28,6 @@ const App = () => {
     dispatch(checkLoggedInUser())
   }, [dispatch])
 
-  const handleCreate = async (blog) => {
-    dispatch(createBlog(blog))
-    dispatch(notify(`Blog created: ${blog.title} by ${blog.author}`))
-    blogFormRef.current.toggleVisibility()
-  }
-
   if (!user) {
     return (
       <Container className="my-5 px-4">
@@ -49,7 +42,7 @@ const App = () => {
     return (
       <div>
         <Toggleable buttonLabel="create new blog" ref={blogFormRef}>
-          <NewBlog create={handleCreate} />
+          <NewBlog toggle={() => blogFormRef.current.toggleVisibility()} />
         </Toggleable>
         <BlogList />
       </div>

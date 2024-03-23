@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogsReducer'
+import { notify } from '../reducers/notificationReducer'
 
-const NewBlog = ({ create }) => {
+const NewBlog = (props) => {
+  const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [author, setAuthor] = useState('')
@@ -10,12 +14,23 @@ const NewBlog = ({ create }) => {
   const onUrlChange = (e) => setUrl(e.target.value)
   const onAuthorChange = (e) => setAuthor(e.target.value)
 
-  const onSubmit = (evt) => {
+  const onSubmit = async (evt) => {
     evt.preventDefault()
-    create({ title, url, author })
-    setAuthor('')
-    setTitle('')
-    setUrl('')
+    const blog = { title, url, author }
+
+    try {
+      dispatch(createBlog(blog))
+      dispatch(notify(`Blog created: ${blog.title} by ${blog.author}`))
+      setAuthor('')
+      setTitle('')
+      setUrl('')
+
+      if (props.toggle) {
+        props.toggle()
+      }
+    } catch (error) {
+      dispatch(notify(error.response.data.error))
+    }
   }
 
   return (
@@ -59,7 +74,7 @@ const NewBlog = ({ create }) => {
 }
 
 NewBlog.propTypes = {
-  create: PropTypes.func.isRequired,
+  toggle: PropTypes.func,
 }
 
 export default NewBlog
