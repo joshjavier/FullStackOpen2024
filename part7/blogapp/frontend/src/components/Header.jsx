@@ -2,17 +2,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { notify } from '../reducers/notificationReducer'
 import { logout } from '../reducers/userReducer'
 import Navigation from './Navigation'
+import Button from 'react-bootstrap/Button'
+import Navbar from 'react-bootstrap/Navbar'
 
 const Header = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
-
-  const style = {
-    backgroundColor: '#ddd',
-    padding: 8,
-    display: 'flex',
-    gap: 8,
-  }
 
   const handleLogout = () => {
     dispatch(logout())
@@ -20,11 +15,17 @@ const Header = () => {
   }
 
   return (
-    <header style={style}>
+    <Navbar className="mb-4">
       <Navigation />
-      <div>{user.name} logged in</div>
-      <button onClick={handleLogout}>log out</button>
-    </header>
+      <div className="ms-auto d-flex gap-2">
+        <Navbar.Text className="d-none d-sm-block">
+          {user.name} logged in
+        </Navbar.Text>
+        <Button variant="secondary" onClick={handleLogout}>
+          log out
+        </Button>
+      </div>
+    </Navbar>
   )
 }
 
