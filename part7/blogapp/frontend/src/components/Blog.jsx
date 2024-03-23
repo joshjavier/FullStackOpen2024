@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { deleteBlog, likeBlog } from '../reducers/blogsReducer'
+import { addComment, deleteBlog, likeBlog } from '../reducers/blogsReducer'
 import { notify } from '../reducers/notificationReducer'
 import storage from '../services/storage'
 
@@ -32,6 +32,12 @@ const Blog = () => {
     dispatch(notify(`You liked ${blog.title} by ${blog.author}`))
   }
 
+  const onAddComment = (evt) => {
+    evt.preventDefault()
+    dispatch(addComment(blog.id, evt.target.comment.value))
+    evt.target.reset()
+  }
+
   return (
     <div>
       <h2>
@@ -53,16 +59,20 @@ const Blog = () => {
         )}
       </div>
 
-      {blog.comments.length > 0 && (
-        <div>
-          <h3>comments</h3>
+      <div>
+        <h3>comments</h3>
+        <form onSubmit={onAddComment}>
+          <input type="text" name="comment" />
+          <button>add comment</button>
+        </form>
+        {blog.comments.length > 0 && (
           <ul>
             {blog.comments.map((comment) => (
               <li key={comment.id}>{comment.content}</li>
             ))}
           </ul>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
