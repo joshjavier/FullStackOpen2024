@@ -16,6 +16,8 @@ import Toggleable from './components/Toggleable'
 import Users from './components/Users'
 import User from './components/User'
 
+import Container from 'react-bootstrap/Container'
+
 const App = () => {
   const user = useSelector((state) => state.user)
   const blogFormRef = useRef()
@@ -35,11 +37,11 @@ const App = () => {
 
   if (!user) {
     return (
-      <div>
-        <h2>log in to application</h2>
+      <Container className="my-5 px-4">
+        <h2 className="mb-4">log in to application</h2>
         <Notification />
         <Login />
-      </div>
+      </Container>
     )
   }
 
@@ -55,7 +57,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Container>
       <Header />
       <h2>blogs</h2>
       <Notification />
@@ -66,7 +68,7 @@ const App = () => {
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User />} />
       </Routes>
-    </div>
+    </Container>
   )
 }
 

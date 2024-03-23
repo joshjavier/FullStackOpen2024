@@ -2,6 +2,10 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { notify } from '../reducers/notificationReducer'
 import { login } from '../reducers/userReducer'
+import Button from 'react-bootstrap/Button'
+import Col from 'react-bootstrap/Col'
+import Form from 'react-bootstrap/Form'
+import Row from 'react-bootstrap/Row'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -23,27 +27,37 @@ const Login = () => {
   }
 
   return (
-    <form onSubmit={onLogin}>
-      <label style={{ display: 'block' }}>
-        Username:
-        <input
-          type="text"
-          data-testid="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </label>
-      <label style={{ display: 'block' }}>
-        Password:
-        <input
-          type="password"
-          data-testid="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
-      <button>Log in</button>
-    </form>
+    <Form onSubmit={onLogin}>
+      <Form.Group as={Row} className="mb-3" controlId="username">
+        <Form.Label column sm={3} md={2}>
+          Username:
+        </Form.Label>
+        <Col sm={9} md={10}>
+          <Form.Control
+            type="text"
+            data-testid="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </Col>
+      </Form.Group>
+      <Form.Group as={Row} className="mb-3" controlId="password">
+        <Form.Label column sm={3} md={2}>
+          Password:
+        </Form.Label>
+        <Col sm={9} md={10}>
+          <Form.Control
+            type="password"
+            data-testid="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Col>
+      </Form.Group>
+      <Button variant="primary" type="submit">
+        Log in
+      </Button>
+    </Form>
   )
 }
 
