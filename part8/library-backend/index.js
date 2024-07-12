@@ -115,6 +115,15 @@ const typeDefs = `
     allBooks(author: String, genre: String): [Book!]!,
     allAuthors: [Author!]!
   }
+
+  type Mutation {
+    addBook(
+      title: String!
+      author: String!
+      published: Int!
+      genres: [String!]!
+    ): Book
+  }
 `
 
 const resolvers = {
@@ -134,7 +143,20 @@ const resolvers = {
   Author: {
     bookCount: (author) =>
       books.filter(b => b.author === author.name).length
-  }
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      // add the author to the system if not yet added
+      if (!authors.find(a => a.name === args.author)) {
+        const newAuthor = { name: args.author, id: crypto.randomUUID() }
+        authors = authors.concat(newAuthor)
+      }
+
+      const newBook = { ...args, id: crypto.randomUUID() }
+      books = books.concat(newBook)
+      return newBook
+    }
+  },
 }
 
 const server = new ApolloServer({
