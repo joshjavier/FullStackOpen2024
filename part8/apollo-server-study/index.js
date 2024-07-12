@@ -1,5 +1,6 @@
 import { ApolloServer } from "@apollo/server"
 import { startStandaloneServer } from "@apollo/server/standalone"
+import { GraphQLError } from "graphql"
 
 const typeDefs = `
   type Address {
@@ -18,6 +19,15 @@ const typeDefs = `
     personCount: Int!
     allPersons: [Person!]!
     findPerson(name: String!): Person
+  }
+
+  type Mutation {
+    addPerson(
+      name: String!
+      phone: String
+      street: String!
+      city: String!
+    ): Person
   }
 `
 
@@ -56,6 +66,22 @@ const resolvers = {
       street: root.street,
       city: root.city
     })
+  },
+  Mutation: {
+    addPerson: (root, args) => {
+      if (persons.find(p => p.name === args.name)) {
+        throw new GraphQLError('Name must be unique', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name
+          }
+        })
+      }
+
+      const person = { ...args, id: crypto.randomUUID() }
+      persons = persons.concat(person)
+      return person
+    }
   }
 }
 
