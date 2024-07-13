@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { gql, useQuery } from "@apollo/client"
+import Persons from "./components/Persons"
 
 const ALL_PERSONS = gql`
   query {
@@ -10,19 +11,6 @@ const ALL_PERSONS = gql`
     }
   }
 `
-
-const Persons = ({ persons }) => {
-  return (
-    <div>
-      <h2>Persons</h2>
-      {persons.map(p => (
-        <div key={p.id}>
-          {p.name} {p.phone}
-        </div>
-      ))}
-    </div>
-  )
-}
 
 const App = () => {
   const { loading, data } = useQuery(ALL_PERSONS)
