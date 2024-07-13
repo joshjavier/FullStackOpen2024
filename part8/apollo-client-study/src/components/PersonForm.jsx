@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useMutation } from "@apollo/client"
-import { CREATE_PERSON } from "../queries";
+import { ALL_PERSONS, CREATE_PERSON } from "../queries";
 
 const Field = ({ label }) => {
   return (
@@ -12,7 +12,9 @@ const Field = ({ label }) => {
 }
 
 const PersonForm = () => {
-  const [ createPerson ] = useMutation(CREATE_PERSON)
+  const [ createPerson ] = useMutation(CREATE_PERSON, {
+    refetchQueries: [{ query: ALL_PERSONS }]
+  })
 
   const onSubmit = event => {
     event.preventDefault()
