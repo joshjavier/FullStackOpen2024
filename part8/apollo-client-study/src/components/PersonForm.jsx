@@ -1,19 +1,6 @@
 /* eslint-disable react/prop-types */
-import { gql, useMutation } from "@apollo/client"
-
-const CREATE_PERSON = gql`
-  mutation createPerson($name: String!, $street: String!, $city: String!, $phone: String) {
-    addPerson(name: $name, street: $street, city: $city, phone: $phone) {
-      name
-      phone
-      id
-      address {
-        street
-        city
-      }
-    }
-  }
-`
+import { useMutation } from "@apollo/client"
+import { CREATE_PERSON } from "../queries";
 
 const Field = ({ label }) => {
   return (
