@@ -11,9 +11,13 @@ const Field = ({ label }) => {
   )
 }
 
-const PersonForm = () => {
+const PersonForm = ({ setError }) => {
   const [ createPerson ] = useMutation(CREATE_PERSON, {
-    refetchQueries: [{ query: ALL_PERSONS }]
+    refetchQueries: [{ query: ALL_PERSONS }],
+    onError: (error) => {
+      const messages = error.graphQLErrors.map(e => e.message).join('\n')
+      setError(messages)
+    }
   })
 
   const onSubmit = event => {
