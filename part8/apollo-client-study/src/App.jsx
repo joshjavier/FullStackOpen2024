@@ -1,27 +1,31 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useQuery } from "@apollo/client"
 import Persons from "./components/Persons"
 import PersonForm from "./components/PersonForm"
-import { ALL_PERSONS } from "./queries";
+import PhoneForm from "./components/PhoneForm"
+import { ALL_PERSONS } from "./queries"
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const { loading, data } = useQuery(ALL_PERSONS)
+  const errorTimeout = useRef(null)
 
-  if (loading) return <div>Loading...</div>
-
-  const notify = (message) => {
+  const notify = useCallback((message) => {
+    clearTimeout(errorTimeout.current)
     setErrorMessage(message)
-    setTimeout(() => {
+    errorTimeout.current = setTimeout(() => {
       setErrorMessage(null)
     }, 10000);
-  }
+  }, [errorTimeout, setErrorMessage])
+
+  if (loading) return <div>Loading...</div>
 
   return (
     <div>
       <Notify errorMessage={errorMessage} />
       <PersonForm setError={notify} />
+      <PhoneForm setError={notify} />
       <Persons persons={data.allPersons} />
     </div>
   )
