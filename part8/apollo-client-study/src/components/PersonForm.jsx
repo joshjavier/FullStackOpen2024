@@ -1,15 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useMutation } from "@apollo/client"
 import { ALL_PERSONS, CREATE_PERSON } from "../queries";
-
-const Field = ({ label }) => {
-  return (
-    <div>
-      <label htmlFor={label}>{label}</label>
-      <input type="text" id={label} name={label} />
-    </div>
-  )
-}
+import Field from './Field'
 
 const PersonForm = ({ setError }) => {
   const [ createPerson ] = useMutation(CREATE_PERSON, {
