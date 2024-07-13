@@ -30,7 +30,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <BirthYearForm />
+      <BirthYearForm options={authors} />
     </div>
   )
 }

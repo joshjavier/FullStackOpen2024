@@ -1,8 +1,9 @@
 import { useMutation } from "@apollo/client"
 import { EDIT_AUTHOR, ALL_AUTHORS } from "../queries"
-import Field from './Field'
+import Field from "./Field"
+import Select from "./Select"
 
-const BirthYearForm = () => {
+const BirthYearForm = ({ options }) => {
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }]
   })
@@ -27,7 +28,7 @@ const BirthYearForm = () => {
     <div>
       <h3>Set birthyear</h3>
       <form onSubmit={onSubmit}>
-        <Field label="name" />
+        <Select label="name" options={options} />
         <Field label="born" />
         <button>update author</button>
       </form>
