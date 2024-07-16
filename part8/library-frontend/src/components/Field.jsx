@@ -1,8 +1,8 @@
-const Field = ({ label }) => {
+const Field = ({ label, type = 'text' }) => {
   return (
     <div>
       <label htmlFor={label}>{label}</label>
-      <input type="text" name={label} id={label} />
+      <input type={type} name={label} id={label} />
     </div>
   )
 }
