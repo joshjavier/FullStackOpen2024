@@ -5,7 +5,11 @@ import Field from './Field'
 
 const PersonForm = ({ setError }) => {
   const [ createPerson ] = useMutation(CREATE_PERSON, {
-    refetchQueries: [{ query: ALL_PERSONS }],
+    update: (cache, { data: { addPerson } }) => {
+      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => ({
+        allPersons: allPersons.concat(addPerson)
+      }))
+    },
     onError: (error) => {
       const messages = error.graphQLErrors.map(e => e.message).join('\n')
       setError(messages)
@@ -21,7 +25,7 @@ const PersonForm = ({ setError }) => {
     createPerson({
       variables: {
         name: formData.get('name'),
-        phone: formData.get('phone'),
+        phone: formData.get('phone').length > 0 ? formData.get('phone') : undefined,
         street: formData.get('street'),
         city: formData.get('city')
       }
