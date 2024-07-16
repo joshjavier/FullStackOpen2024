@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import { Author, Book } from "./models/index.js"
+import { Author, Book, User } from "./models/index.js"
 import * as data from "./data.js"
 
 const uri = process.env.MONGODB_URI
@@ -26,6 +26,7 @@ async function init() {
 async function clearCollections() {
   await Author.deleteMany({})
   await Book.deleteMany({})
+  await User.deleteMany({})
 }
 
 async function initializeDb() {
@@ -34,5 +35,6 @@ async function initializeDb() {
     const author = authors.find(a => a.name === book.author)
     return { ...book, author: author.id }
   }))
-  console.log(`Database initialized with ${authors.length} authors and ${books.length} books`)
+  let users = await User.insertMany(data.users)
+  console.log(`Database initialized with ${authors.length} authors, ${books.length} books, and ${users.length} users`)
 }

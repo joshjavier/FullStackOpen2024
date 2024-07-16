@@ -68,5 +68,9 @@ export const users = [
   {
     username: "joshjavier",
     favoriteGenre: "horror"
-  }
+  },
+  {
+    username: "tina",
+    favoriteGenre: "erotic friend fiction"
+  },
 ]
