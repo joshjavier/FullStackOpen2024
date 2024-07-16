@@ -21,7 +21,7 @@ const PersonForm = ({ setError }) => {
     createPerson({
       variables: {
         name: formData.get('name'),
-        phone: formData.get('phone'),
+        phone: formData.get('phone').length > 0 ? formData.get('phone') : undefined,
         street: formData.get('street'),
         city: formData.get('city')
       }
