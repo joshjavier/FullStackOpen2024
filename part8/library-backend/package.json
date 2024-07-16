@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "npx nodemon index.js"
+    "start": "node --env-file=.env index.js",
+    "dev": "npx nodemon --env-file=.env.local index.js"
   },
   "author": "Josh Javier",
   "license": "MIT",
