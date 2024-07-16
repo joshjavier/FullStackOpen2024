@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server'
 import { startStandaloneServer } from '@apollo/server/standalone'
+import { GraphQLError } from "graphql"
 import { Author, Book } from "./models/index.js"
 import './db.js'
 
@@ -49,6 +50,7 @@ const resolvers = {
       if (args.author) {
         const author = await Author.findOne({ name: args.author })
         if (author) filter['author'] = author.id
+        return [] // no books because author is not in the database
       }
       if (args.genre) filter['genres'] = args.genre
 
@@ -62,21 +64,40 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      // add the author to the system if not yet added
-      let author = await Author.findOne({ name: args.author })
-      if (!author) {
-        author = new Author({ name: args.author })
-        await author.save()
-      }
+      try {
+        // add the author to the system if not yet added
+        let author = await Author.findOne({ name: args.author })
+        if (!author) {
+          author = new Author({ name: args.author })
+          await author.save()
+        }
 
-      const newBook = new Book({ ...args, author: author.id })
-      await newBook.save()
-      return newBook.populate('author')
+        const newBook = new Book({ ...args, author: author.id })
+        await newBook.save()
+        return newBook.populate('author')
+      } catch (error) {
+        if (error.name === 'ValidationError') {
+          const path = Object.keys(error.errors)[0]
+          const field = path === 'name' ? 'Author name' : 'Book title'
+          throw new GraphQLError(`${field} is too short`, {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: path,
+              errors: error.errors,
+            }
+          })
+        } else {
+          console.log(error)
+        }
+      }
     },
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name })
-      if (!author)
-        return
+      if (!author) {
+        throw new GraphQLError('Author not found', {
+          extensions: { code: 'BAD_USER_INPUT' }
+        })
+      }
 
       author.born = args.setBornTo
       return author.save()

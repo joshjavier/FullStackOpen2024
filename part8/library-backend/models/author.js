@@ -5,6 +5,7 @@ const schema = new Schema({
   name: {
     type: String,
     required: true,
+    minLength: 3,
   },
   born: Number,
 })
