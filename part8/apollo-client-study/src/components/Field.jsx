@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-const Field = ({ label }) => {
+const Field = ({ label, type = 'text' }) => {
   return (
     <div>
       <label htmlFor={label}>{label}</label>
-      <input type="text" id={label} name={label} />
+      <input type={type} id={label} name={label} />
     </div>
   )
 }

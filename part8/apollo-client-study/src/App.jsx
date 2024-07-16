@@ -4,9 +4,11 @@ import { useQuery } from "@apollo/client"
 import Persons from "./components/Persons"
 import PersonForm from "./components/PersonForm"
 import PhoneForm from "./components/PhoneForm"
+import LoginForm from "./components/LoginForm"
 import { ALL_PERSONS } from "./queries"
 
 const App = () => {
+  const [token, setToken] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const { loading, data } = useQuery(ALL_PERSONS)
   const errorTimeout = useRef(null)
@@ -20,6 +22,16 @@ const App = () => {
   }, [errorTimeout, setErrorMessage])
 
   if (loading) return <div>Loading...</div>
+
+  if (!token) {
+    return (
+      <div>
+        <Notify errorMessage={errorMessage} />
+        <h2>Login</h2>
+        <LoginForm setToken={setToken} setError={notify} />
+      </div>
+    )
+  }
 
   return (
     <div>
