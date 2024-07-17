@@ -1,0 +1,13 @@
+button {
+  border: 1px solid hsl(0 0% 50%);
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+button + button {
+  margin-left: 4px;
+}
+
+[aria-pressed="true"] {
+  background-color: hotpink;
+}
