@@ -5,7 +5,7 @@ const schema = new Schema({
   title: {
     type: String,
     required: true,
-    minLength: 3,
+    minLength: 2,
   },
   author: {
     type: Schema.Types.ObjectId,

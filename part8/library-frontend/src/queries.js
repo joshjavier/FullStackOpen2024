@@ -35,7 +35,9 @@ export const ADD_BOOK = gql`
     addBook(title: $title, author: $author, published: $published, genres: $genres) {
       id
       title
-      author
+      author {
+        name
+      }
       published
       genres
     }
@@ -72,6 +74,7 @@ export const RECOMMEND = gql`
         name
       }
       published
+      genres
     }
   }
 `

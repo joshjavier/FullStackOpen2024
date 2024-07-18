@@ -4,10 +4,11 @@ import { ALL_BOOKS, ALL_GENRES } from "../queries"
 import '../css/button.css'
 
 const Books = (props) => {
-  const [selectedGenre, setGenre] = useState(null)
+  const [selectedGenre, setGenre] = useState(undefined)
   const { loading: genresLoading, data: genresData } = useQuery(ALL_GENRES)
   const { loading: booksLoading, data: booksData } = useQuery(ALL_BOOKS, {
-    variables: { genre: selectedGenre }
+    variables: { genre: selectedGenre },
+    fetchPolicy: 'cache-and-network',
   })
 
   if (!props.show) return
@@ -45,7 +46,7 @@ const Books = (props) => {
           aria-pressed={genre === selectedGenre}
         >{genre}</button>
       ))}
-      <button onClick={() => setGenre(null)}>all genres</button>
+      <button onClick={() => setGenre(undefined)}>all genres</button>
     </div>
   )
 }
