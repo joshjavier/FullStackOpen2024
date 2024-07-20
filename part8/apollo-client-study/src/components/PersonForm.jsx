@@ -1,15 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useMutation } from "@apollo/client"
-import { ALL_PERSONS, CREATE_PERSON } from "../queries";
+import { CREATE_PERSON } from "../queries"
 import Field from './Field'
 
 const PersonForm = ({ setError }) => {
   const [ createPerson ] = useMutation(CREATE_PERSON, {
-    update: (cache, { data: { addPerson } }) => {
-      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => ({
-        allPersons: allPersons.concat(addPerson)
-      }))
-    },
     onError: (error) => {
       const messages = error.graphQLErrors.map(e => e.message).join('\n')
       setError(messages)

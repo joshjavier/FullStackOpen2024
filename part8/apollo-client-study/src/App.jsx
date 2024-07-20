@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import { useCallback, useRef, useState } from "react";
-import { useQuery, useApolloClient } from "@apollo/client"
+import { useQuery, useApolloClient, useSubscription } from "@apollo/client"
 import Persons from "./components/Persons"
 import PersonForm from "./components/PersonForm"
 import PhoneForm from "./components/PhoneForm"
 import LoginForm from "./components/LoginForm"
-import { ALL_PERSONS } from "./queries"
+import { ALL_PERSONS, PERSON_ADDED } from "./queries"
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -13,6 +13,17 @@ const App = () => {
   const { loading, data } = useQuery(ALL_PERSONS)
   const client = useApolloClient()
   const errorTimeout = useRef(null)
+
+  useSubscription(PERSON_ADDED, {
+    onData: ({ data, client }) => {
+      const addedPerson = data.data.personAdded
+      notify(`${addedPerson.name} added`)
+
+      client.cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => ({
+        allPersons: allPersons.concat(addedPerson)
+      }))
+    },
+  })
 
   const notify = useCallback((message) => {
     clearTimeout(errorTimeout.current)
