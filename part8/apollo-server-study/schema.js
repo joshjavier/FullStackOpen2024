@@ -55,6 +55,10 @@ const typeDefs = `
       name: String!
     ): User
   }
+
+  type Subscription {
+    personAdded: Person!
+  }
 `
 
 export default typeDefs

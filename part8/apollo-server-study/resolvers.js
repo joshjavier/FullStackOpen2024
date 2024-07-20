@@ -1,7 +1,10 @@
 import { GraphQLError } from "graphql"
+import { PubSub } from "graphql-subscriptions"
 import Person from "./models/person.js"
 import User from "./models/user.js"
 import jwt from "jsonwebtoken"
+
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -48,6 +51,8 @@ const resolvers = {
           }
         })
       }
+
+      pubsub.publish('PERSON_ADDED', { personAdded: person })
 
       return person
     },
@@ -119,7 +124,12 @@ const resolvers = {
 
       return currentUser
     },
-  }
+  },
+  Subscription: {
+    personAdded: {
+      subscribe: () => pubsub.asyncIterator('PERSON_ADDED'),
+    },
+  },
 }
 
 export default resolvers

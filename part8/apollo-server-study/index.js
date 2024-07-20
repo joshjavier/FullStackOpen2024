@@ -2,14 +2,18 @@ import { ApolloServer } from "@apollo/server"
 import { expressMiddleware } from "@apollo/server/express4"
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer"
 import cors from 'cors'
-import http from 'http'
+import { createServer } from "http"
 import express from 'express'
+import { makeExecutableSchema } from "@graphql-tools/schema"
+import { WebSocketServer } from "ws"
+import { useServer } from "graphql-ws/lib/use/ws"
 import mongoose from "mongoose"
 import jwt from "jsonwebtoken"
 import User from "./models/user.js"
 import typeDefs from "./schema.js"
 import resolvers from "./resolvers.js"
 
+// Establish connection to the database
 const MONGODB_URI = process.env.MONGODB_URI
 
 console.log('connecting to', MONGODB_URI)
@@ -22,13 +26,31 @@ mongoose.connect(MONGODB_URI)
     console.log('error connecting to MongoDB:', error.message)
   })
 
+// Set up http and websocket servers
 const app = express()
-const httpServer = http.createServer(app)
+const httpServer = createServer(app)
+const schema = makeExecutableSchema({ typeDefs, resolvers })
+
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: '/',
+})
+const serverCleanup = useServer({ schema }, wsServer)
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  schema,
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await serverCleanup.dispose()
+          }
+        }
+      }
+    },
+  ],
 })
 
 await server.start()
