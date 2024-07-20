@@ -1,5 +1,9 @@
 import { ApolloServer } from "@apollo/server"
-import { startStandaloneServer } from "@apollo/server/standalone"
+import { expressMiddleware } from "@apollo/server/express4"
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer"
+import cors from 'cors'
+import http from 'http'
+import express from 'express'
 import mongoose from "mongoose"
 import jwt from "jsonwebtoken"
 import User from "./models/user.js"
@@ -18,46 +22,35 @@ mongoose.connect(MONGODB_URI)
     console.log('error connecting to MongoDB:', error.message)
   })
 
-// let persons = [
-//   {
-//     name: "Arto Hellas",
-//     phone: "040-123543",
-//     street: "Tapiolankatu 5 A",
-//     city: "Espoo",
-//     id: "3d594650-3436-11e9-bc57-8b80ba54c431"
-//   },
-//   {
-//     name: "Matti Luukkainen",
-//     phone: "040-432342",
-//     street: "Malminkaari 10 A",
-//     city: "Helsinki",
-//     id: '3d599470-3436-11e9-bc57-8b80ba54c431'
-//   },
-//   {
-//     name: "Venla Ruuska",
-//     street: "Nallemäentie 22 C",
-//     city: "Helsinki",
-//     id: '3d599471-3436-11e9-bc57-8b80ba54c431'
-//   },
-// ]
-
-
+const app = express()
+const httpServer = http.createServer(app)
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 })
 
-const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
-  context: async ({ req, res }) => {
-    const auth = req ? req.headers.authorization : null
-    if (auth && auth.startsWith('Bearer ')) {
-      const decodedToken = jwt.verify(auth.slice(7), process.env.SECRET)
-      const currentUser = await User.findById(decodedToken.id).populate('friends')
-      return { currentUser }
-    }
-  },
-})
+await server.start()
 
-console.log(`Server ready at ${url}`)
+app.use(
+  '/',
+  cors(),
+  express.json(),
+  expressMiddleware(server, {
+    context: async ({ req }) => {
+      const auth = req ? req.headers.authorization : null
+      if (auth && auth.startsWith('Bearer ')) {
+        const decodedToken = jwt.verify(auth.slice(7), process.env.SECRET)
+        const currentUser = await User.findById(decodedToken.id).populate('friends')
+        return { currentUser }
+      }
+    },
+  }),
+)
+
+const PORT = process.env.PORT
+
+httpServer.listen(PORT, () => {
+  console.log(`Server is now running on http://localhost:${PORT}`)
+})
