@@ -4,18 +4,40 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import express from 'express'
 import http from 'http'
 import cors from 'cors'
+import { makeExecutableSchema } from "@graphql-tools/schema"
+import { WebSocketServer } from "ws"
+import { useServer } from "graphql-ws/lib/use/ws"
 import jwt from 'jsonwebtoken'
 import { User } from "./models/index.js"
 import { typeDefs, resolvers } from "./schema.js"
 import './db.js'
 
+const schema = makeExecutableSchema({ typeDefs, resolvers })
+
+// Set up http and websocket servers
 const app = express()
 const httpServer = http.createServer(app)
 
+const wsServer = new WebSocketServer({
+  server: httpServer,
+  path: '/',
+})
+const serverCleanup = useServer({ schema }, wsServer)
+
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  schema,
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    {
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await serverCleanup.dispose()
+          }
+        }
+      }
+    },
+  ],
 })
 
 await server.start()

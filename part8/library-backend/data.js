@@ -67,7 +67,7 @@ export const books = [
 export const users = [
   {
     username: "joshjavier",
-    favoriteGenre: "horror"
+    favoriteGenre: "design"
   },
   {
     username: "tina",

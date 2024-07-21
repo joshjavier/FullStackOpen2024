@@ -1,5 +1,8 @@
 import { GraphQLError } from "graphql"
+import { PubSub } from "graphql-subscriptions"
 import { Author, Book, User } from "./models/index.js"
+
+const pubsub = new PubSub()
 
 export const typeDefs = `
   type Book {
@@ -56,6 +59,10 @@ export const typeDefs = `
       password: String!
     ): Token
   }
+
+  type Subscription {
+    bookAdded: Book!
+  }
 `
 
 export const resolvers = {
@@ -104,7 +111,12 @@ export const resolvers = {
 
         const newBook = new Book({ ...args, author: author.id })
         await newBook.save()
-        return newBook.populate('author')
+        const savedBook = await newBook.populate('author')
+
+        // Notify subscribers of the new book
+        pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
+
+        return savedBook
       } catch (error) {
         if (error.name === 'ValidationError') {
           const path = Object.keys(error.errors)[0]
@@ -169,6 +181,11 @@ export const resolvers = {
       }
 
       return { value: jwt.sign(payload, process.env.SECRET) }
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator('BOOK_ADDED'),
     },
   },
 }
