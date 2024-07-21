@@ -35,6 +35,12 @@ async function initializeDb() {
     const author = authors.find(a => a.name === book.author)
     return { ...book, author: author.id }
   }))
+
+  for (const author of authors) {
+    author.books = books.filter(b => b.author.toString() === author.id).map(b => b.author)
+    await author.save()
+  }
+
   let users = await User.insertMany(data.users)
   console.log(`Database initialized with ${authors.length} authors, ${books.length} books, and ${users.length} users`)
 }

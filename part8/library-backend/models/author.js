@@ -8,6 +8,12 @@ const schema = new Schema({
     minLength: 3,
   },
   born: Number,
+  books: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Book',
+    },
+  ],
 })
 
 schema.set('toJSON', {

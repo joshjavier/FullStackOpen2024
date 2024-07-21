@@ -94,8 +94,7 @@ export const resolvers = {
     },
   },
   Author: {
-    bookCount: async (author) =>
-      Book.countDocuments({ author: author.id })
+    bookCount: async ({ books }) => books.length
   },
   Mutation: {
     addBook: async (root, args, { currentUser }) => {
