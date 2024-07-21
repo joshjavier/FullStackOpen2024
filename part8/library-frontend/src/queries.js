@@ -1,5 +1,32 @@
 import { gql } from "@apollo/client"
 
+// Fragments
+
+const CORE_BOOK_FIELDS = gql`
+  fragment CoreBookFields on Book {
+    id
+    title
+    author {
+      name
+    }
+    published
+  }
+`
+
+const ALL_BOOK_FIELDS = gql`
+  fragment AllBookFields on Book {
+    id
+    title
+    author {
+      name
+    }
+    published
+    genres
+  }
+`
+
+// Queries
+
 export const ALL_AUTHORS = gql`
   query AllAuthors {
     allAuthors {
@@ -12,14 +39,10 @@ export const ALL_AUTHORS = gql`
 `
 
 export const ALL_BOOKS = gql`
+  ${CORE_BOOK_FIELDS}
   query AllBooks($author: String, $genre: String) {
     allBooks(author: $author, genre: $genre) {
-      id
-      title
-      author {
-        name
-      }
-      published
+      ...CoreBookFields
     }
   }
 `
@@ -31,15 +54,10 @@ export const ALL_GENRES = gql`
 `
 
 export const ADD_BOOK = gql`
+  ${ALL_BOOK_FIELDS}
   mutation AddBook($title: String!, $author: String!, $published: Int!, $genres: [String!]!) {
     addBook(title: $title, author: $author, published: $published, genres: $genres) {
-      id
-      title
-      author {
-        name
-      }
-      published
-      genres
+      ...AllBookFields
     }
   }
 `
@@ -63,18 +81,22 @@ export const LOGIN = gql`
 `
 
 export const RECOMMEND = gql`
+  ${ALL_BOOK_FIELDS}
   query Recommend {
     me {
       favoriteGenre
     }
     allBooks {
-      id
-      title
-      author {
-        name
-      }
-      published
-      genres
+      ...AllBookFields
+    }
+  }
+`
+
+export const BOOK_ADDED = gql`
+  ${ALL_BOOK_FIELDS}
+  subscription BookAdded {
+    bookAdded {
+      ...AllBookFields
     }
   }
 `
