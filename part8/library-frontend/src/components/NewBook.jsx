@@ -75,12 +75,18 @@ const NewBook = (props) => {
           <input
             value={genre}
             onChange={({ target }) => setGenre(target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                event.preventDefault()
+                addGenre()
+              }
+            }}
           />
           <button onClick={addGenre} type="button">
             add genre
           </button>
         </div>
-        <div>genres: {genres.join(' ')}</div>
+        <div>genres: {genres.join(', ')}</div>
         <button type="submit">create book</button>
       </form>
     </div>
