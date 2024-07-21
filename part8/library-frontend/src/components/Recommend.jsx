@@ -1,15 +1,33 @@
-import { useQuery } from "@apollo/client"
-import { RECOMMEND } from "../queries"
+import { useQuery, useSubscription } from "@apollo/client"
+import { BOOK_ADDED, RECOMMENDED_BOOKS } from "../queries"
 
 const Recommend = ({ show }) => {
-  const { loading, data } = useQuery(RECOMMEND)
+  const { loading, data } = useQuery(RECOMMENDED_BOOKS)
+  const favoriteGenre = data?.me.favoriteGenre
+  const books = data?.recommendedBooks
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ client, data }) => {
+      const addedBook = data.data.bookAdded
+      if (!addedBook.genres.includes(favoriteGenre)) {
+        return
+      }
+
+      client.cache.updateQuery(
+        { query: RECOMMENDED_BOOKS },
+        (result) => {
+          return {
+            ...result,
+            recommendedBooks: result.recommendedBooks.concat(addedBook)
+          }
+        },
+      )
+    },
+  })
 
   if (!show) return
 
   if (loading) return <div>Loading...</div>
-
-  const { favoriteGenre } = data.me
-  const books = data.allBooks.filter(book => book.genres.includes(favoriteGenre))
 
   return (
     <div>

@@ -37,6 +37,7 @@ export const typeDefs = `
     allGenres: [String!]!
     allAuthors: [Author!]!
     me: User
+    recommendedBooks: [Book!]!
   }
 
   type Mutation {
@@ -87,6 +88,10 @@ export const resolvers = {
     },
     allAuthors: async () => Author.find({}),
     me: (root, args, context) => context.currentUser,
+    recommendedBooks: async (root, args, { currentUser }) => {
+      const filter = { genres: currentUser.favoriteGenre }
+      return Book.find(filter).populate('author')
+    },
   },
   Author: {
     bookCount: async (author) =>

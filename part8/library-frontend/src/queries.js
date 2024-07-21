@@ -83,14 +83,14 @@ export const LOGIN = gql`
   }
 `
 
-export const RECOMMEND = gql`
-  ${ALL_BOOK_FIELDS}
-  query Recommend {
+export const RECOMMENDED_BOOKS = gql`
+  ${CORE_BOOK_FIELDS}
+  query RecommendedBooks {
     me {
       favoriteGenre
     }
-    allBooks {
-      ...AllBookFields
+    recommendedBooks {
+      ...CoreBookFields
     }
   }
 `
