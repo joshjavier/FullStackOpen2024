@@ -18,7 +18,10 @@ const ALL_BOOK_FIELDS = gql`
     id
     title
     author {
+      id
       name
+      born
+      bookCount
     }
     published
     genres

@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { useApolloClient, useSubscription } from "@apollo/client";
+import { useApolloClient } from "@apollo/client";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import LoginForm from './components/LoginForm';
 import Recommend from "./components/Recommend";
-import { BOOK_ADDED } from "./queries";
 
 const App = () => {
   const [page, setPage] = useState("authors");
@@ -19,12 +18,6 @@ const App = () => {
       setToken(storedUser)
     }
   }, [])
-
-  useSubscription(BOOK_ADDED, {
-    onData: ({ data }) => {
-      console.log(data)
-    },
-  })
 
   const login = useCallback((token) => {
     setToken(token)                             // save token to state

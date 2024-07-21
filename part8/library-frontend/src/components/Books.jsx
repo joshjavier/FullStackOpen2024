@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { useQuery } from "@apollo/client"
-import { ALL_BOOKS, ALL_GENRES } from "../queries"
+import { useQuery, useSubscription } from "@apollo/client"
+import { ALL_BOOKS, ALL_GENRES, BOOK_ADDED } from "../queries"
 import '../css/button.css'
 
 const Books = (props) => {
@@ -9,6 +9,27 @@ const Books = (props) => {
   const { loading: booksLoading, data: booksData } = useQuery(ALL_BOOKS, {
     variables: { genre: selectedGenre },
     fetchPolicy: 'cache-and-network',
+  })
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ client, data }) => {
+      const addedBook = data.data.bookAdded
+      // update genres
+      client.cache.updateQuery(
+        { query: ALL_GENRES },
+        ({ allGenres }) => {
+          const updatedGenres = new Set(allGenres.concat(addedBook.genres))
+          return { allGenres: Array.from(updatedGenres) }
+        }
+      )
+      // update books
+      client.cache.updateQuery(
+        { query: ALL_BOOKS, variables: { genre: selectedGenre } },
+        ({ allBooks }) => {
+          return { allBooks: allBooks.concat(addedBook) }
+        },
+      )
+    },
   })
 
   if (!props.show) return

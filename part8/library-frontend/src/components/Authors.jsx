@@ -1,9 +1,32 @@
-import { useQuery } from "@apollo/client"
-import { ALL_AUTHORS } from "../queries"
+import { useQuery, useSubscription } from "@apollo/client"
+import { ALL_AUTHORS, BOOK_ADDED } from "../queries"
 import BirthYearForm from "./BirthYearForm"
 
 const Authors = (props) => {
   const { loading, data } = useQuery(ALL_AUTHORS)
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ client, data }) => {
+      const addedBook = data.data.bookAdded
+      client.cache.updateQuery(
+        { query: ALL_AUTHORS },
+        ({ allAuthors }) => {
+          const authorIds = allAuthors.map(author => author.id)
+          if (authorIds.includes(addedBook.author.id)) {
+            allAuthors = allAuthors.map(author => {
+              return author.id === addedBook.author.id
+                ? { ...author, bookCount: addedBook.author.bookCount }
+                : author
+            })
+          } else {
+            allAuthors = allAuthors.concat(addedBook.author)
+          }
+
+          return { allAuthors }
+        },
+      )
+    },
+  })
 
   if (!props.show) return
 
