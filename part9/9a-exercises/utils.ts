@@ -1,3 +1,3 @@
-export function isNotNumber(argument: any): boolean {
-  return argument === '' || isNaN(Number(argument))
+export function isNotNumber(argument: string): boolean {
+  return argument === '' || isNaN(Number(argument));
 }

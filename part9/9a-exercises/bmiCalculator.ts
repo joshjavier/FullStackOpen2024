@@ -20,18 +20,18 @@
 // }
 
 export function calculateBmi(height: number, weight: number): string {
-  const bmi = weight / (height ** 2) * 1e4
-  let category
+  const bmi = weight / (height ** 2) * 1e4;
+  let category;
   if (bmi < 18.5) {
-    category = 'underweight'
+    category = 'underweight';
   } else if (bmi >= 18.5 && bmi < 25) {
-    category = 'normal weight'
+    category = 'normal weight';
   } else if (bmi >= 25 && bmi < 30) {
-    category = 'overweight'
+    category = 'overweight';
   } else {
-    category = 'obese'
+    category = 'obese';
   }
-  return category
+  return category;
 }
 
 // try {

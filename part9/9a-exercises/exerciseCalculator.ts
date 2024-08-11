@@ -1,4 +1,4 @@
-import { isNotNumber } from "./utils"
+import { isNotNumber } from "./utils";
 
 interface Result {
   periodLength: number
@@ -16,40 +16,40 @@ interface Args {
 }
 
 function parseArguments(args: string[]): Args {
-  if (args.length < 4) throw new Error('Not enough arguments')
+  if (args.length < 4) throw new Error('Not enough arguments');
 
-  const [target, ...trainingHours] = args.slice(2)
+  const [target, ...trainingHours] = args.slice(2);
   if (!isNotNumber(target) && trainingHours.every(val => !isNotNumber(val))) {
     return {
       target: Number(target),
       trainingHours: trainingHours.map(Number),
-    }
+    };
   } else {
-    throw new Error('Provided values were not numbers!')
+    throw new Error('Provided values were not numbers!');
   }
 }
 
 function calculateExercises(trainingHours: number[], target: number): Result {
   const nonzeroDays = (count: number, day: number): number => {
-    return day !== 0 ? count + 1 : count
-  }
-  const trainingDays = trainingHours.reduce(nonzeroDays, 0)
-  const periodLength = trainingHours.length
-  const sum = trainingHours.reduce((sum, val) => sum + val, 0)
-  const average = sum / periodLength
-  const success = average >= target
+    return day !== 0 ? count + 1 : count;
+  };
+  const trainingDays = trainingHours.reduce(nonzeroDays, 0);
+  const periodLength = trainingHours.length;
+  const sum = trainingHours.reduce((sum, val) => sum + val, 0);
+  const average = sum / periodLength;
+  const success = average >= target;
 
-  let rating
+  let rating;
   if (average > target) {
-    rating = 4
+    rating = 4;
   } else if (average === target) {
-    rating = 3
+    rating = 3;
   } else if (average === 0) {
-    rating = 0
+    rating = 0;
   } else if (trainingDays >= Math.floor(periodLength / 2)) {
-    rating = 2
+    rating = 2;
   } else {
-    rating = 1
+    rating = 1;
   }
 
   const ratingDescription = [
@@ -58,7 +58,7 @@ function calculateExercises(trainingHours: number[], target: number): Result {
     'Not too bad but could be better.',
     'Perfect! You reached your target!',
     'Plus ultra! You make All Might proud by going beyond your target.',
-  ]
+  ];
 
   return {
     periodLength,
@@ -68,16 +68,16 @@ function calculateExercises(trainingHours: number[], target: number): Result {
     ratingDescription: ratingDescription[rating],
     target,
     average,
-  }
+  };
 }
 
 try {
-  const { trainingHours, target } = parseArguments(process.argv)
-  console.log(calculateExercises(trainingHours, target))
+  const { trainingHours, target } = parseArguments(process.argv);
+  console.log(calculateExercises(trainingHours, target));
 } catch (error) {
-  let errorMessage = 'Something bad happened.'
+  let errorMessage = 'Something bad happened.';
   if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message
+    errorMessage += ' Error: ' + error.message;
   }
-  console.log(errorMessage)
+  console.log(errorMessage);
 }
