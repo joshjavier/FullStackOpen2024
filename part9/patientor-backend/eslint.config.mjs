@@ -19,5 +19,6 @@ export default tseslint.config({
   },
   rules: {
     '@stylistic/semi': 'error',
+    '@typescript-eslint/restrict-plus-operands': 'off',
   },
 })
