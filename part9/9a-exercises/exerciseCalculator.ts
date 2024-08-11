@@ -1,4 +1,23 @@
-import { isNotNumber } from "./utils";
+// import { isNotNumber } from "./utils";
+
+// interface Args {
+//   trainingHours: number[]
+//   target: number
+// }
+
+// function parseArguments(args: string[]): Args {
+//   if (args.length < 4) throw new Error('Not enough arguments');
+
+//   const [target, ...trainingHours] = args.slice(2);
+//   if (!isNotNumber(target) && trainingHours.every(val => !isNotNumber(val))) {
+//     return {
+//       target: Number(target),
+//       trainingHours: trainingHours.map(Number),
+//     };
+//   } else {
+//     throw new Error('Provided values were not numbers!');
+//   }
+// }
 
 interface Result {
   periodLength: number
@@ -10,26 +29,7 @@ interface Result {
   average: number
 }
 
-interface Args {
-  trainingHours: number[]
-  target: number
-}
-
-function parseArguments(args: string[]): Args {
-  if (args.length < 4) throw new Error('Not enough arguments');
-
-  const [target, ...trainingHours] = args.slice(2);
-  if (!isNotNumber(target) && trainingHours.every(val => !isNotNumber(val))) {
-    return {
-      target: Number(target),
-      trainingHours: trainingHours.map(Number),
-    };
-  } else {
-    throw new Error('Provided values were not numbers!');
-  }
-}
-
-function calculateExercises(trainingHours: number[], target: number): Result {
+export function calculateExercises(trainingHours: number[], target: number): Result {
   const nonzeroDays = (count: number, day: number): number => {
     return day !== 0 ? count + 1 : count;
   };
@@ -71,13 +71,13 @@ function calculateExercises(trainingHours: number[], target: number): Result {
   };
 }
 
-try {
-  const { trainingHours, target } = parseArguments(process.argv);
-  console.log(calculateExercises(trainingHours, target));
-} catch (error) {
-  let errorMessage = 'Something bad happened.';
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
-  }
-  console.log(errorMessage);
-}
+// try {
+//   const { trainingHours, target } = parseArguments(process.argv);
+//   console.log(calculateExercises(trainingHours, target));
+// } catch (error) {
+//   let errorMessage = 'Something bad happened.';
+//   if (error instanceof Error) {
+//     errorMessage += ' Error: ' + error.message;
+//   }
+//   console.log(errorMessage);
+// }
