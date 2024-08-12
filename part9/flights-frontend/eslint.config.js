@@ -36,6 +36,7 @@ export default tseslint.config({
     ],
     ...stylistic.configs['recommended-flat'].rules,
     '@stylistic/arrow-parens': ['error', 'always'],
+    '@stylistic/brace-style': ['error', '1tbs'],
     '@stylistic/jsx-one-expression-per-line': [
       'error',
       { allow: 'single-line' },
