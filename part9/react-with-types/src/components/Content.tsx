@@ -1,16 +1,15 @@
-import { Part } from "../types"
+import Part from "./Part"
+import { CoursePart } from "../types"
 
 type Props = {
-  parts: Part[]
+  parts: CoursePart[]
 }
 
 function Content({ parts }: Props) {
   return (
     <>
       {parts.map(p => (
-        <p key={p.name}>
-          {p.name} {p.exerciseCount}
-        </p>
+        <Part key={p.name} part={p} />
       ))}
     </>
   )

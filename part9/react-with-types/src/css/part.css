@@ -1,0 +1,7 @@
+.part > * {
+  margin-bottom: 0;
+}
+
+.part > * + * {
+  margin-top: 0;
+}
