@@ -1,7 +1,8 @@
 import { FormEvent, useState } from 'react'
-import Field from './Field'
-import { EntryFormValues } from '../types'
 import { isAxiosError } from 'axios'
+import { EntryFormValues, Visibility, Weather } from '../types'
+import Field from './Field'
+import RadioGroup from './RadioGroup'
 
 type Props = {
   addEntry: (object: EntryFormValues) => Promise<void>
@@ -44,9 +45,15 @@ function AddNewEntry({ addEntry }: Props) {
       <h2>Add new entry</h2>
       <p className="error">{error}</p>
       <form onSubmit={onSubmit}>
-        <Field label="date" />
-        <Field label="visibility" />
-        <Field label="weather" />
+        <Field label="date" type="date" />
+        <RadioGroup
+          label="visibility"
+          options={Object.values(Visibility)}
+        />
+        <RadioGroup
+          label="weather"
+          options={Object.values(Weather)}
+        />
         <Field label="comment" />
         <button>add</button>
       </form>

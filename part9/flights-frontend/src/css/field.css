@@ -2,3 +2,24 @@
   display: flex;
   gap: var(--space, 4px);
 }
+
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+legend:not(:focus):not(:active) {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  white-space: nowrap;
+}
+
+fieldset .field {
+  flex-direction: row-reverse;
+}
