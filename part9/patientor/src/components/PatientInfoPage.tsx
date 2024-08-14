@@ -6,6 +6,7 @@ import { isAxiosError } from "axios";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from '@mui/icons-material/Transgender';
+import PatientEntry from "./PatientEntry";
 
 const PatientInfoPage = () => {
   const { id } = useParams();
@@ -44,6 +45,15 @@ const PatientInfoPage = () => {
       <p>ssn: {patient.ssn}</p>
       <p>occupation: {patient.occupation}</p>
       <p>date of birth: {patient.dateOfBirth}</p>
+
+      <h3>entries</h3>
+      {patient.entries ? (
+        patient.entries.map(entry => (
+          <PatientEntry key={entry.id} entry={entry} />
+        ))
+      ) : (
+        <div>No entries yet.</div>
+      )}
     </div>
   );
 };
