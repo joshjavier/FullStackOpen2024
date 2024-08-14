@@ -12,6 +12,7 @@ export function toNewPatient(object: unknown): NewPatient {
       ssn: parseSSN(object.ssn),
       gender: parseGender(object.gender),
       occupation: parseString(object.occupation, 'occupation'),
+      entries: [], // TODO: add validation
     };
 
     return newPatient;
