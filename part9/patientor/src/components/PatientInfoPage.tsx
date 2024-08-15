@@ -6,7 +6,8 @@ import { isAxiosError } from "axios";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from '@mui/icons-material/Transgender';
-import PatientEntry from "./PatientEntry";
+import EntryDetails from "./EntryDetails";
+import { Stack } from "@mui/material";
 
 type Props = {
   diagnoses: Diagnosis[]
@@ -52,9 +53,11 @@ const PatientInfoPage = ({ diagnoses }: Props) => {
 
       <h3>entries</h3>
       {patient.entries.length ? (
-        patient.entries.map(entry => (
-          <PatientEntry key={entry.id} entry={entry} diagnoses={diagnoses} />
-        ))
+        <Stack spacing={2}>
+          {patient.entries.map(entry => (
+            <EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
+          ))}
+        </Stack>
       ) : (
         <div>No entries yet.</div>
       )}

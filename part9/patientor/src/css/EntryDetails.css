@@ -1,0 +1,11 @@
+.entry :first-child {
+  margin-top: 0;
+}
+
+.entry :last-child {
+  margin-bottom: 0;
+}
+
+.entry .MuiSvgIcon-root {
+  vertical-align: bottom; /* align icon with text */
+}
