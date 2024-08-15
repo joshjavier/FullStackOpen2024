@@ -1,15 +1,17 @@
-import { Entry } from "../types";
+import { Diagnosis, Entry } from "../types";
 
 type Props = {
   entry: Entry
+  diagnoses: Diagnosis[]
 };
 
-const PatientEntry = ({ entry }: Props) => {
-  const diagnosesList = (
+const PatientEntry = ({ entry, diagnoses }: Props) => {
+  const diagnosisList = (
     <ul>
-      {entry.diagnosisCodes?.map(code => (
-          <li key={code}>{code}</li>
-        ))}
+      {entry.diagnosisCodes?.map(code => {
+        const name = diagnoses.find(d => d.code === code)?.name;
+        return <li key={code}>{code} {name}</li>;
+      })}
     </ul>
   );
 
@@ -17,7 +19,7 @@ const PatientEntry = ({ entry }: Props) => {
     <div>
       <p><span>{entry.date}</span> <em>{entry.description}</em></p>
 
-      {entry.diagnosisCodes && diagnosesList}
+      {entry.diagnosisCodes && diagnosisList}
     </div>
   );
 };

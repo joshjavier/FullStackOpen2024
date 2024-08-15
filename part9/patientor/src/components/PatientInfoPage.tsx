@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import patientService from "../services/patients";
-import { Patient } from "../types";
+import { Diagnosis, Patient } from "../types";
 import { isAxiosError } from "axios";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from '@mui/icons-material/Transgender';
 import PatientEntry from "./PatientEntry";
 
-const PatientInfoPage = () => {
+type Props = {
+  diagnoses: Diagnosis[]
+};
+
+const PatientInfoPage = ({ diagnoses }: Props) => {
   const { id } = useParams();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [error, setError] = useState('');
@@ -47,9 +51,9 @@ const PatientInfoPage = () => {
       <p>date of birth: {patient.dateOfBirth}</p>
 
       <h3>entries</h3>
-      {patient.entries ? (
+      {patient.entries.length ? (
         patient.entries.map(entry => (
-          <PatientEntry key={entry.id} entry={entry} />
+          <PatientEntry key={entry.id} entry={entry} diagnoses={diagnoses} />
         ))
       ) : (
         <div>No entries yet.</div>
