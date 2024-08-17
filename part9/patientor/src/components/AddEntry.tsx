@@ -1,18 +1,25 @@
-import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Stack, TextField } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, OutlinedInput, Select, Slider, Stack, TextField, Typography } from "@mui/material";
 import { FormEvent, useState } from "react";
-import { Entry, EntryType, NewEntry } from "../types";
+import { Diagnosis, Entry, EntryType, HealthCheckRating, NewEntry } from "../types";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 type Props = {
   addEntry: (entry: NewEntry) => Promise<{ data?: Entry, error?: string }>
+  codes: Array<Diagnosis['code']>
 };
 
-const AddEntry = ({ addEntry }: Props) => {
+const AddEntry = ({ addEntry, codes }: Props) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const [type, setType] = useState(EntryType.HealthCheck);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const marks = Object.keys(HealthCheckRating)
+    .filter(v => isNaN(Number(v)))
+    .map((v, i) => ({ value: i, label: v }));
 
   return (
     <>
@@ -33,7 +40,7 @@ const AddEntry = ({ addEntry }: Props) => {
             const baseFields = {
               type: formJson.type,
               description: formJson.description,
-              date: formJson.date,
+              date: dayjs(formJson.date).format().slice(0, 10),
               specialist: formJson.specialist,
               diagnosisCodes: formJson.diagnosisCodes,
             };
@@ -48,7 +55,7 @@ const AddEntry = ({ addEntry }: Props) => {
               newEntry = {
                 ...baseFields,
                 discharge: {
-                  date: formJson['discharge-date'],
+                  date: dayjs(formJson['discharge-date']).format().slice(0, 10),
                   criteria: formJson['discharge-criteria'],
                 },
               };
@@ -57,11 +64,13 @@ const AddEntry = ({ addEntry }: Props) => {
                 ...baseFields,
                 employerName: formJson.employerName,
                 sickLeave: {
-                  startDate: formJson.startDate,
-                  endDate: formJson.endDate,
+                  startDate: dayjs(formJson.startDate).format().slice(0, 10),
+                  endDate: dayjs(formJson.endDate).format().slice(0, 10),
                 },
               };
             }
+            // console.log(formJson);
+            // console.log(newEntry);
 
             const submitNewEntry = async (newEntry: NewEntry) => {
               const result = await addEntry(newEntry);
@@ -87,26 +96,51 @@ const AddEntry = ({ addEntry }: Props) => {
 
             {/* General fields */}
             <TextField label="Description" name="description" required autoFocus />
-            <TextField label="Date" name="date" required />
+            {/* <TextField label="Date" name="date" required /> */}
+            <DatePicker label="Date" name="date" />
             <TextField label="Specialist" name="specialist" required />
 
             {/* Type-specific fields */}
             {type === 'HealthCheck' ? (
-              <TextField label="Healthcheck rating" name="healthCheckRating" required />
+              <>
+                <Typography id="healthcheckrating-slider-label">Healthcheck rating</Typography>
+                <Slider
+                  aria-labelledby="healthcheckrating-slider-label"
+                  name="healthCheckRating"
+                  min={0}
+                  max={3}
+                  marks={marks}
+                  style={{ marginBottom: 24, marginInline: 'auto', maxWidth: '50%' }}
+                />
+              </>
             ) : type === 'Hospital' ? (
               <>
-                <TextField label="Discharge date" name="discharge-date" required />
+                <DatePicker label="Discharge date" name="discharge-date" />
                 <TextField label="Discharge criteria" name="discharge-criteria" required />
               </>
             ) : type === 'OccupationalHealthcare' ? (
               <>
                 <TextField label="Employer name" name="employerName" required />
-                <TextField label="Sick leave start date" name="startDate" />
-                <TextField label="Sick leave end date" name="endDate" />
+                <DatePicker label="Sick leave start date" name="startDate" />
+                <DatePicker label="Sick leave end date" name="endDate" />
               </>
             ) : null}
 
-            <TextField label="Diagnosis codes" name="diagnosisCodes" />
+            <FormControl>
+              <InputLabel id="codes-label">Diagnosis codes</InputLabel>
+              <Select
+                multiple
+                labelId="codes-label"
+                name="diagnosisCodes"
+                defaultValue={[]}
+                input={<OutlinedInput label="Diagnosis codes" />}
+                MenuProps={{ sx: { maxHeight: 250 } }}
+              >
+                {codes.map(c => (
+                  <MenuItem key={c} value={c}>{c}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             {error && <Alert severity="error">{error}</Alert>}
           </Stack>
         </DialogContent>

@@ -72,7 +72,7 @@ const PatientInfoPage = ({ diagnoses }: Props) => {
       <p>occupation: {patient.occupation}</p>
       <p>date of birth: {patient.dateOfBirth}</p>
 
-      <AddEntry addEntry={addEntry} />
+      <AddEntry addEntry={addEntry} codes={diagnoses.map(d => d.code)} />
 
       <h3>entries</h3>
       {patient.entries.length ? (
