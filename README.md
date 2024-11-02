@@ -14,7 +14,7 @@ Learning to be a **Full-Stack Developer**
 - [x] Part 7: React router, custom hooks, styling app with CSS and webpack
 - [x] Part 8: GraphQL
 - [x] Part 9: TypeScript
-- [ ] Part 10: React Native
-- [ ] Part 11: CI/CD
-- [ ] Part 12: Containers
+- [ ] Part 10: React Native (skipped for now)
+- [x] Part 11: CI/CD
+- [x] Part 12: Containers
 - [ ] Part 13: Using relational databases
