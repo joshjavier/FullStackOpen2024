@@ -12,7 +12,10 @@ const Note = sequelize.define('note', {
     allowNull: false,
   },
   important: DataTypes.BOOLEAN,
-  date: DataTypes.DATE,
+  date: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
 }, {
   underscored: true,
   timestamps: false,
