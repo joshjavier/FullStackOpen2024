@@ -17,4 +17,4 @@ Learning to be a **Full-Stack Developer**
 - [ ] Part 10: React Native (skipped for now)
 - [x] Part 11: CI/CD
 - [x] Part 12: Containers
-- [ ] Part 13: Using relational databases
+- [x] Part 13: Using relational databases
